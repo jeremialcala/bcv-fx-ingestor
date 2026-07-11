@@ -1,6 +1,6 @@
 # Gate 1 — Design
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
@@ -8,7 +8,7 @@
 
 | # | Criterio | Evidencia | Estado |
 |---|---|---|---|
-| 1 | Arquitectura C4 validada (Context/Container/Component) | PRD §C4Context; `architecture.md` §C4 Container/Component | ✅ diagramas listos, validación humana ⬜ |
+| 1 | Arquitectura C4 validada (Context/Container/Component) | PRD §C4Context; `architecture.md` §C4 Container/Component | ✅ validada 2026-07-11 |
 | 2 | Threat model STRIDE completo | `threat-model.md` §STRIDE (6 componentes) | ✅ |
 | 3 | Amenazas priorizadas con DREAD y control por amenaza | `threat-model.md` §DREAD (T1–T8, score + control) | ✅ |
 | 4 | ADRs de decisiones estructurales | ADR-0001, ADR-0002, ADR-0003 | ✅ |
@@ -17,6 +17,6 @@
 | 7 | Modelo de datos y dominio | `architecture.md` §erDiagram, §classDiagram | ✅ |
 | 8 | Patrones de seguridad por amenaza priorizada | `architecture.md` §Patrones de seguridad | ✅ |
 | 9 | **Decisión HITL: política TLS ante certificado inválido del BCV** | ADR-0004 (fallo cerrado, sin `--inseguro`); `threat-model.md` §Controles | ✅ decidida 2026-07-11 |
-| 10 | **Aprobación humana del gate** | — | ⬜ pendiente (HITL) |
+| 10 | **Aprobación humana del gate** | — | ✅ aprobado 2026-07-11 (Jeremi Alcalá) |
 
-Al aprobar: cortar `[Unreleased]` → `0.2.0` en CHANGELOG, pasar artefactos 02-design a `approved`, y arrancar 03-implementation (esqueleto `src/` + pirámide `tests/`).
+Gate aprobado el 2026-07-11: `[Unreleased]` cortado a `0.2.0` en el CHANGELOG y artefactos de 02-design pasados a `approved`. Siguiente paso: arrancar 03-implementation (esqueleto `src/` + pirámide `tests/`, Gate 2).

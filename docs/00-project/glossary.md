@@ -1,6 +1,6 @@
 # Glosario / Lenguaje Ubicuo (DDD)
 
-* **Estado:** draft
+* **Estado:** approved
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 00-project

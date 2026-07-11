@@ -1,6 +1,6 @@
 # Project Charter — BCV FX Ingestor
 
-* **Estado:** draft
+* **Estado:** approved
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá (owner)
 * **Fase AI-DLC:** 00-project

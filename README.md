@@ -8,10 +8,10 @@ Proyecto estructurado con la metodología **AI-DLC** (seguridad por diseño, gat
 
 | Fase | Gate | Estado |
 |---|---|---|
-| 00-project | — | draft |
-| 01-requirements | Gate 0 | evidencia completa, pendiente aprobación humana |
-| 02-design | Gate 1 | evidencia completa, pendiente aprobación humana |
-| 03-implementation | Gate 2 | no iniciada |
+| 00-project | — | approved |
+| 01-requirements | Gate 0 | ✅ aprobado 2026-07-11 |
+| 02-design | Gate 1 | ✅ aprobado 2026-07-11 |
+| 03-implementation | Gate 2 | lista para arrancar |
 
 ## Estructura
 

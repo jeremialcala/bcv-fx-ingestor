@@ -1,6 +1,6 @@
 # Gate 0 — Requirements
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 01-requirements
@@ -15,10 +15,10 @@
 | 5 | Clasificación de datos | `docs/00-project/data-classification.md` | ✅ |
 | 6 | Charter y glosario (lenguaje ubicuo) | `charter.md` (mindmap), `glossary.md` | ✅ |
 | 7 | Journey y trazabilidad de requisitos | PRD §journey, §requirementDiagram | ✅ |
-| 8 | **Aprobación humana del gate** | — | ⬜ pendiente (HITL) |
-
-Abiertos antes de aprobar: confirmar stakeholders operador/analista (charter).
+| 8 | **Aprobación humana del gate** | — | ✅ aprobado 2026-07-11 (Jeremi Alcalá) |
 
 Resuelto 2026-07-11: patrón de URLs de descarga del BCV confirmado contra el portal (PRD §Dependencias y riesgos, ADR-0002).
 
-Al aprobar: cortar `[Unreleased]` → `0.1.0` en CHANGELOG (ya preparado) y pasar artefactos de fase 00/01 a `approved`.
+Abierto trasladado a 03-implementation: confirmar stakeholders operador/analista (charter, `<TODO>`).
+
+Gate aprobado el 2026-07-11: artefactos de fases 00/01 pasados a `approved`; la versión `0.1.0` ya estaba cortada en el CHANGELOG.

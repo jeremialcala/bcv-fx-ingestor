@@ -1,6 +1,6 @@
 # PRD — Ingesta de tipos de cambio históricos del BCV
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 01-requirements
