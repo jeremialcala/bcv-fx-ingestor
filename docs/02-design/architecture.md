@@ -282,7 +282,7 @@ Nota: `BID <= ASK` se valida en el Validador (no como CHECK) porque la fuente co
 |---|---|---|
 | T1 Cambio de layout silencioso | Parser con contrato explícito (posiciones + encabezados verificados); si no coincide → cuarentena, nunca "mejor esfuerzo" | A08 |
 | T3 Datos fuente erróneos | Validación de dominio + cuarentena trazable (evidencia: CHF 31/03/2020) | A08 |
-| T2 Suplantación de fuente | HTTPS con verificación estricta; hash SHA-256 registrado; excepción TLS solo por decisión humana documentada | A02 |
+| T2 Suplantación de fuente | HTTPS con verificación estricta y fallo cerrado — sin flag de excepción (ADR-0004); hash SHA-256 registrado; respaldo: modo local | A02 |
 | T4 Re-ingesta duplicada/alterada | Idempotencia por constraints (UNIQUE sha256, UNIQUE jornada+moneda) | A08 |
 | T5 XLS malicioso | xlrd sin macros; límites de tamaño/filas; ingesta en proceso sin privilegios | A03/A08 |
 | T6 Inyección SQL | Solo queries parametrizadas (sqlite3 placeholders) | A03 |

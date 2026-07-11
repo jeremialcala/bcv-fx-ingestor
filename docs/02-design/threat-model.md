@@ -86,7 +86,7 @@ Escala 1–10 por dimensión; Score = promedio.
 | T1 | Cambio de layout del XLS carga datos corridos sin error | 9 | 9 | 7 | 8 | 6 | 7.8 | Contrato de layout verificado + cuarentena (ADR-0003) |
 | T3 | Datos erróneos de la fuente cargados como válidos (caso CHF) | 8 | 10 | 8 | 8 | 5 | 7.8 | Validador BID≤ASK, rangos, desviación (ADR-0003) |
 | T7 | Series con escalas mezcladas por redenominación | 8 | 8 | 6 | 8 | 5 | 7.0 | `escala_monetaria` por jornada (architecture.md) |
-| T2 | Suplantación del portal BCV / MITM en descarga | 9 | 4 | 5 | 8 | 6 | 6.4 | TLS estricto + SHA-256 registrado (RS01); excepción solo HITL |
+| T2 | Suplantación del portal BCV / MITM en descarga | 9 | 4 | 5 | 8 | 6 | 6.4 | TLS estricto con fallo cerrado, sin excepciones (ADR-0004) + SHA-256 registrado (RS01) |
 | T4 | Re-ingesta de archivo alterado con mismo nombre | 7 | 6 | 6 | 7 | 5 | 6.2 | UNIQUE sha256 + UNIQUE jornada/moneda (ADR-0002) |
 | T5 | XLS malicioso explota el parser | 8 | 3 | 4 | 7 | 5 | 5.4 | xlrd sin macros, límites, proceso sin privilegios (RS02) |
 | T6 | Inyección SQL vía contenido de celdas | 6 | 3 | 4 | 6 | 4 | 4.6 | Queries parametrizadas (RS03) |
@@ -95,6 +95,6 @@ Escala 1–10 por dimensión; Score = promedio.
 ## Controles y trazabilidad
 
 - Cada amenaza ≥ 6.0 tiene control en `architecture.md` §Patrones de seguridad y ADR asociada; ninguna queda sin dueño.
-- Decisión pendiente (HITL): política ante certificado TLS inválido del portal BCV — ¿fallar siempre, o permitir excepción explícita con `--inseguro` + registro? <TODO: decisión humana antes de cerrar Gate 1>
-  - Evidencia (2026-07-11): el certificado actual de `www.bcv.org.ve` valida correctamente contra el almacén de confianza del sistema (verificado con HEAD sobre HTTPS sin excepciones). La decisión sigue abierta porque el historial del portal incluye períodos con certificado inválido.
+- Decisión HITL (2026-07-11, Jeremi Alcalá): ante certificado TLS inválido del portal BCV el proceso **falla siempre**; no existe flag `--inseguro` ni vía de excepción. Respaldo operativo: modo local. Ver ADR-0004.
+  - Evidencia (2026-07-11): el certificado actual de `www.bcv.org.ve` valida correctamente contra el almacén de confianza del sistema (verificado con HEAD sobre HTTPS sin excepciones).
 - T8 se acepta parcialmente (riesgo operativo, no de seguridad); mitigación por modo local.

@@ -16,7 +16,7 @@
 | 6 | Flujo crítico y ciclo de vida de entidad núcleo | `architecture.md` §sequence, §stateDiagram (Ingesta) | ✅ |
 | 7 | Modelo de datos y dominio | `architecture.md` §erDiagram, §classDiagram | ✅ |
 | 8 | Patrones de seguridad por amenaza priorizada | `architecture.md` §Patrones de seguridad | ✅ |
-| 9 | **Decisión HITL: política TLS ante certificado inválido del BCV** | `threat-model.md` §Controles | ⬜ pendiente |
+| 9 | **Decisión HITL: política TLS ante certificado inválido del BCV** | ADR-0004 (fallo cerrado, sin `--inseguro`); `threat-model.md` §Controles | ✅ decidida 2026-07-11 |
 | 10 | **Aprobación humana del gate** | — | ⬜ pendiente (HITL) |
 
 Al aprobar: cortar `[Unreleased]` → `0.2.0` en CHANGELOG, pasar artefactos 02-design a `approved`, y arrancar 03-implementation (esqueleto `src/` + pirámide `tests/`).

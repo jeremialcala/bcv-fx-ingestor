@@ -15,7 +15,10 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ### Cambiado
 - Patrón de URLs de descarga del BCV confirmado contra el portal (2026-07-11) y documentado en PRD, ADR-0002 y glosario: `2_1_2{t}{AA}_smc.xls` por trimestre (`a`–`d` = I–IV), histórico desde 2020-TI, 404 en períodos inexistentes. Resuelve el abierto correspondiente del Gate 0.
-- Threat model: evidencia registrada de que el certificado TLS actual del portal valida correctamente; la decisión HITL de política TLS sigue abierta.
+- Threat model: evidencia registrada de que el certificado TLS actual del portal valida correctamente.
+
+### Seguridad
+- Decisión HITL (2026-07-11): política TLS de fallo cerrado — ante certificado inválido del portal BCV el proceso falla siempre, sin flag `--inseguro` ni vía de excepción; respaldo operativo por modo local. Documentada en ADR-0004 y propagada a threat model (T2), arquitectura (§Patrones de seguridad) y PRD (RS01). Cierra el criterio 9 del Gate 1.
 
 > Pendiente de corte a `0.2.0` cuando el Gate 1 sea aprobado (Human-in-the-Loop).
 

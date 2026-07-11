@@ -142,7 +142,7 @@ requirementDiagram
 
 | Req | Descripción | ASVS | Nivel | OWASP Top 10 |
 |---|---|---|---|---|
-| RS01 | Descarga solo por HTTPS con verificación de certificado; excepciones del portal BCV requieren decisión explícita y pinning/registro de hash | V9.1 (comunicaciones) | L1 | A02 fallas criptográficas |
+| RS01 | Descarga solo por HTTPS con verificación estricta de certificado y fallo cerrado: ante certificado inválido el proceso falla, sin mecanismo de excepción (ADR-0004); hash SHA-256 registrado por archivo | V9.1 (comunicaciones) | L1 | A02 fallas criptográficas |
 | RS02 | Tratar todo XLS como entrada no confiable: parser sin ejecución de macros/fórmulas, límites de tamaño y filas | V5.1 (validación de entrada) | L1 | A03 inyección / A08 integridad |
 | RS03 | Queries SQL exclusivamente parametrizadas | V5.3 | L1 | A03 inyección |
 | RS04 | Integridad y auditoría: hash SHA-256 por archivo, trazabilidad archivo→jornada→tasa, log de cada decisión de cuarentena | V7 (logging), V8 (protección de datos) | L1 | A08 integridad / A09 logging |
@@ -197,4 +197,4 @@ quadrantChart
 
 - Disponibilidad y estabilidad del portal BCV (formato de URLs y de archivos). Patrón confirmado (2026-07-11): `https://www.bcv.org.ve/sites/default/files/EstadisticasGeneral/2_1_2{t}{AA}_smc.xls`, donde `{t}` es la letra del trimestre (`a`=I, `b`=II, `c`=III, `d`=IV) y `{AA}` el año en dos dígitos. Histórico publicado desde 2020-TI (`a20`) hasta el trimestre en curso; períodos anteriores a 2020 e inexistentes responden HTTP 404 (señal limpia para el descargador).
 - Librería de parseo de `.xls` legacy (xlrd) sin mantenimiento activo — ver ADR-0003.
-- Política TLS frente al certificado del portal BCV — decisión humana requerida en threat model T2.
+- Política TLS frente al certificado del portal BCV — decidida (2026-07-11): verificación estricta con fallo cerrado, sin excepciones; ante certificado inválido el respaldo operativo es el modo local (ADR-0004, ADR-0002).

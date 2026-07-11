@@ -26,7 +26,8 @@ bcv-fx-ingestor/
 │   │   └── adr/
 │   │       ├── 0001-sqlite-como-almacen.md
 │   │       ├── 0002-ingesta-dual-descarga-y-local.md
-│   │       └── 0003-parser-xlrd-con-validacion-de-dominio.md
+│   │       ├── 0003-parser-xlrd-con-validacion-de-dominio.md
+│   │       └── 0004-tls-estricto-sin-excepciones.md
 │   ├── 01-requirements/
 │   │   └── ingesta-historicos-fx.md        # PRD (Gate 0)
 │   └── 02-design/
