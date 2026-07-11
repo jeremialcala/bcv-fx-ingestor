@@ -96,4 +96,5 @@ Escala 1–10 por dimensión; Score = promedio.
 
 - Cada amenaza ≥ 6.0 tiene control en `architecture.md` §Patrones de seguridad y ADR asociada; ninguna queda sin dueño.
 - Decisión pendiente (HITL): política ante certificado TLS inválido del portal BCV — ¿fallar siempre, o permitir excepción explícita con `--inseguro` + registro? <TODO: decisión humana antes de cerrar Gate 1>
+  - Evidencia (2026-07-11): el certificado actual de `www.bcv.org.ve` valida correctamente contra el almacén de confianza del sistema (verificado con HEAD sobre HTTPS sin excepciones). La decisión sigue abierta porque el historial del portal incluye períodos con certificado inválido.
 - T8 se acepta parcialmente (riesgo operativo, no de seguridad); mitigación por modo local.

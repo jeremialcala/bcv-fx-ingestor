@@ -10,7 +10,7 @@
 | Término | Definición | Contexto acotado (Bounded Context) |
 |---|---|---|
 | Tipo de Cambio de Referencia | Tasa oficial producto de las operaciones en las mesas de cambio de los operadores cambiarios (art. 9, Convenio Cambiario N° 1; Resolución N° 19-05-01) | Ingesta Cambiaria |
-| Archivo SMC | Archivo oficial `2_1_2*_smc.xls` publicado por el BCV con las tasas de referencia; una hoja por fecha de operación | Ingesta Cambiaria |
+| Archivo SMC | Archivo oficial `2_1_2{t}{AA}_smc.xls` publicado por el BCV con las tasas de referencia; uno por trimestre (`{t}`: `a`–`d` = trimestre I–IV, `{AA}`: año en dos dígitos), una hoja por fecha de operación | Ingesta Cambiaria |
 | Jornada | Publicación de tasas de un día: fecha de operación + fecha valor + momento de publicación (una hoja del Archivo SMC) | Ingesta Cambiaria |
 | Fecha de Operación | Día en que se transaron las operaciones que producen la tasa (nombre de la hoja, `DDMMYYYY`) | Ingesta Cambiaria |
 | Fecha Valor | Día hábil siguiente en que la tasa aplica para liquidaciones | Ingesta Cambiaria |

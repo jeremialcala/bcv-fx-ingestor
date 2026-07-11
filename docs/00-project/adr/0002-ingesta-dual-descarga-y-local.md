@@ -29,5 +29,5 @@ Un único pipeline de ingesta (hash → parseo → validación → carga) detrá
 ## Consecuencias
 
 - Positivas: idempotencia y validación idénticas para ambas vías; T4 cubierto por hash único global.
-- Negativas / deuda asumida: el patrón de URLs históricas del BCV debe confirmarse y puede romperse (<TODO: confirmar patrón de URLs>).
+- Negativas / deuda asumida: el patrón de URLs históricas del BCV puede romperse sin aviso. Patrón confirmado el 2026-07-11: `https://www.bcv.org.ve/sites/default/files/EstadisticasGeneral/2_1_2{t}{AA}_smc.xls` (`{t}`: `a`–`d` = trimestre I–IV; `{AA}`: año en dos dígitos); histórico publicado desde 2020-TI, períodos inexistentes responden HTTP 404.
 - Impacto en threat model: concentra T2 en un solo adaptador auditable; el modo local es mitigación de T8.

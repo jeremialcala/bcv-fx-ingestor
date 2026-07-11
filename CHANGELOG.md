@@ -13,6 +13,10 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 - ADR-0001 (SQLite como almacén), ADR-0002 (ingesta dual descarga + local), ADR-0003 (parser xlrd con validación de dominio).
 - Checklist `gates/gate-1-design.md`.
 
+### Cambiado
+- Patrón de URLs de descarga del BCV confirmado contra el portal (2026-07-11) y documentado en PRD, ADR-0002 y glosario: `2_1_2{t}{AA}_smc.xls` por trimestre (`a`–`d` = I–IV), histórico desde 2020-TI, 404 en períodos inexistentes. Resuelve el abierto correspondiente del Gate 0.
+- Threat model: evidencia registrada de que el certificado TLS actual del portal valida correctamente; la decisión HITL de política TLS sigue abierta.
+
 > Pendiente de corte a `0.2.0` cuando el Gate 1 sea aprobado (Human-in-the-Loop).
 
 ## [0.1.0] - 2026-07-11

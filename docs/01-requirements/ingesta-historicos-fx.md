@@ -195,6 +195,6 @@ quadrantChart
 
 ## Dependencias y riesgos
 
-- Disponibilidad y estabilidad del portal BCV (formato de URLs y de archivos). <TODO: confirmar patrón de URLs de descarga por período>
+- Disponibilidad y estabilidad del portal BCV (formato de URLs y de archivos). Patrón confirmado (2026-07-11): `https://www.bcv.org.ve/sites/default/files/EstadisticasGeneral/2_1_2{t}{AA}_smc.xls`, donde `{t}` es la letra del trimestre (`a`=I, `b`=II, `c`=III, `d`=IV) y `{AA}` el año en dos dígitos. Histórico publicado desde 2020-TI (`a20`) hasta el trimestre en curso; períodos anteriores a 2020 e inexistentes responden HTTP 404 (señal limpia para el descargador).
 - Librería de parseo de `.xls` legacy (xlrd) sin mantenimiento activo — ver ADR-0003.
 - Política TLS frente al certificado del portal BCV — decisión humana requerida en threat model T2.

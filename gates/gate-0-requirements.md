@@ -17,6 +17,8 @@
 | 7 | Journey y trazabilidad de requisitos | PRD §journey, §requirementDiagram | ✅ |
 | 8 | **Aprobación humana del gate** | — | ⬜ pendiente (HITL) |
 
-Abiertos antes de aprobar: patrón de URLs de descarga del BCV (<TODO> en PRD); confirmar stakeholders operador/analista (charter).
+Abiertos antes de aprobar: confirmar stakeholders operador/analista (charter).
+
+Resuelto 2026-07-11: patrón de URLs de descarga del BCV confirmado contra el portal (PRD §Dependencias y riesgos, ADR-0002).
 
 Al aprobar: cortar `[Unreleased]` → `0.1.0` en CHANGELOG (ya preparado) y pasar artefactos de fase 00/01 a `approved`.
