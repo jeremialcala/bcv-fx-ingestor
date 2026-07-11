@@ -1,0 +1,31 @@
+# Changelog
+
+Todos los cambios notables de este proyecto se documentan en este archivo.
+
+El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/),
+y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/).
+
+## [Unreleased]
+
+### Añadido
+- Diseño del sistema (`docs/02-design/architecture.md`): C4 Container/Component, secuencia del flujo de ingesta, ciclo de vida de la entidad Ingesta, ER y modelo de dominio hexagonal, contrato de CLI y schema SQLite.
+- Threat model STRIDE + DREAD (`docs/02-design/threat-model.md`) con DFD y quadrant de priorización.
+- ADR-0001 (SQLite como almacén), ADR-0002 (ingesta dual descarga + local), ADR-0003 (parser xlrd con validación de dominio).
+- Checklist `gates/gate-1-design.md`.
+
+> Pendiente de corte a `0.2.0` cuando el Gate 1 sea aprobado (Human-in-the-Loop).
+
+## [0.1.0] - 2026-07-11
+
+### Añadido
+- Charter del proyecto con mindmap de alcance (`docs/00-project/charter.md`).
+- Glosario / lenguaje ubicuo del dominio cambiario BCV (`docs/00-project/glossary.md`).
+- Clasificación de datos (`docs/00-project/data-classification.md`).
+- PRD `docs/01-requirements/ingesta-historicos-fx.md` con escenarios de abuso, C4 Context, journey, trazabilidad ASVS y threat assessment inicial (DFD + quadrant DREAD).
+- Checklist `gates/gate-0-requirements.md`.
+
+### Seguridad
+- Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
+
+[Unreleased]: https://example.com/bcv-fx-ingestor/compare/v0.1.0...HEAD
+[0.1.0]: https://example.com/bcv-fx-ingestor/releases/tag/v0.1.0
