@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Overlay para Google GKE.
+# Credenciales GCS recomendadas: Workload Identity — crear un ServiceAccount anotado con
+#   iam.gke.io/gcp-service-account: bcv-fx-publicador@<PROYECTO>.iam.gserviceaccount.com
+# y referenciarlo en el pod (el remote [gcs] del rclone.conf usa env_auth = true).
+resources:
+  - ../../base
+
+patches:
+  - path: pvc-storageclass.yaml
+    target:
+      kind: PersistentVolumeClaim
+      name: datos-ingestor

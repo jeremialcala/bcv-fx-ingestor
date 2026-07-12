@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Overlay para Amazon EKS.
+# Credenciales S3 recomendadas: IRSA — crear un ServiceAccount anotado con
+#   eks.amazonaws.com/role-arn: arn:aws:iam::<CUENTA>:role/bcv-fx-publicador
+# y referenciarlo en el pod (el remote [s3] del rclone.conf usa env_auth = true).
+resources:
+  - ../../base
+
+patches:
+  - path: pvc-storageclass.yaml
+    target:
+      kind: PersistentVolumeClaim
+      name: datos-ingestor

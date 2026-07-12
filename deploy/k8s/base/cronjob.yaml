@@ -1,0 +1,108 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ingesta-bcv
+  namespace: bcv-fx
+  labels:
+    app.kubernetes.io/name: bcv-fx-ingestor
+spec:
+  # Días hábiles a las 21:00 UTC (~17:00 VET, después de la publicación diaria del BCV).
+  # Este CronJob ES el "cron del operador" del charter, no un scheduler nuevo (ADR-0006).
+  schedule: "0 21 * * 1-5"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 900
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: bcv-fx-ingestor
+        spec:
+          restartPolicy: Never
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            fsGroup: 10001
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+            # 1) Ingesta del trimestre en curso (idempotente por hash; --forzar porque el
+            #    archivo del trimestre gana hojas cada jornada). Exit 0 y 2 son éxito
+            #    operativo: 2 = hubo cuarentenas, que el pipeline aísla sin contaminar la
+            #    serie (RF06) y el operador revisa con `bcv-ingest estado`. Exit >= 3
+            #    (red/TLS) corta el Job y NO se publica nada (fail-closed, ADR-0004).
+            - name: ingesta
+              image: ghcr.io/jeremialcala/bcv-fx-ingestor:v0.5.0
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  mes="$(date -u +%Y-%m)"
+                  bcv-ingest --db /data/bcv_fx.db descargar \
+                    --desde "$mes" --hasta "$mes" --forzar --destino /data/entrada
+                  rc=$?
+                  if [ "$rc" -eq 2 ]; then
+                    echo "cuarentenas presentes: revisar con 'bcv-ingest estado'" >&2
+                    rc=0
+                  fi
+                  exit "$rc"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: "1"
+                  memory: 512Mi
+              volumeMounts:
+                - name: datos
+                  mountPath: /data
+          containers:
+            # 2) Publicación del artefacto a las tres nubes con una sola herramienta.
+            #    Los remotes s3/gcs/r2 se definen en el Secret rclone-conf
+            #    (ver secret-rclone.example.yaml). Solo corre si la ingesta terminó bien.
+            - name: publicar
+              image: rclone/rclone:1.68
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  for remote in s3 gcs r2; do
+                    rclone copyto /data/bcv_fx.db "$remote:bcv-fx-artefactos/bcv_fx.db" \
+                      --s3-no-check-bucket || exit 1
+                    echo "publicado en $remote"
+                  done
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  cpu: 500m
+                  memory: 256Mi
+              volumeMounts:
+                - name: datos
+                  mountPath: /data
+                  readOnly: true
+                - name: rclone-conf
+                  mountPath: /config/rclone
+                  readOnly: true
+          volumes:
+            - name: datos
+              persistentVolumeClaim:
+                claimName: datos-ingestor
+            - name: rclone-conf
+              secret:
+                secretName: rclone-conf

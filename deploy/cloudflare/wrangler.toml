@@ -1,0 +1,12 @@
+# Worker de distribución del artefacto (deploy: `npx wrangler deploy` en esta carpeta).
+# El bucket R2 `bcv-fx-artefactos` lo alimenta el CronJob de K8s vía rclone (remote r2).
+name = "bcv-fx-artefacto"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "bcv-fx-artefactos"
+
+[observability]
+enabled = true

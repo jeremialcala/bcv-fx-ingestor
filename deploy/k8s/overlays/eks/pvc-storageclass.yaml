@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: datos-ingestor
+  namespace: bcv-fx
+spec:
+  storageClassName: gp3

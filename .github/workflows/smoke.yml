@@ -1,0 +1,35 @@
+# Smoke semanal contra el portal REAL del BCV: detecta drift del layout (T1), del
+# patrón de URLs o del TLS (T2/T8) antes de que lo sufra el operador. No bloquea el CI.
+name: Smoke ingesta real
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # lunes 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ingesta-real:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e .
+      - name: descargar e ingerir 2020-TI desde el portal
+        run: |
+          rc=0
+          bcv-ingest --db smoke.db descargar --desde 2020-01 --hasta 2020-03 --destino entrada-smoke || rc=$?
+          # exit 2 = cuarentenas (esperado: la anomalía CHF); solo >=3 es fallo real
+          if [ "$rc" -ne 0 ] && [ "$rc" -ne 2 ]; then
+            echo "descarga falló con exit $rc" >&2
+            exit "$rc"
+          fi
+      - name: verificar lo ingerido
+        run: |
+          bcv-ingest --db smoke.db estado > estado.json
+          python -c "import json; t = json.load(open('estado.json'))['totales']; esperado = {'jornadas': 3, 'tasas': 68, 'cuarentenas_pendientes': 1}; assert t == esperado, t; print('smoke OK:', t)"
