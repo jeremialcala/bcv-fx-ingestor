@@ -1,6 +1,6 @@
 # Gate 3 — Testing
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-12
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 04-testing
@@ -17,9 +17,10 @@
 | 7 | Rendimiento dentro de SLOs | RNF01: archivo trimestral real en 0.04 s < 30 s (medición + test de regresión `test_rendimiento.py`) | ✅ |
 | 8 | Validación operativa sobre datos reales | Corpus completo 2020-TI→2026-TIII: 1.393 jornadas, 30.784 tasas, 5 anomalías reales aisladas; re-ingesta = 0 filas nuevas | ✅ |
 | 9 | Diagramas válidos y CHANGELOG al día | 18/18 bloques Mermaid válidos; `[Unreleased]` con la fase 04 | ✅ |
-| 10 | **Aprobación humana del gate** | — | ⬜ pendiente (HITL) |
+| 10 | **Aprobación humana del gate** | — | ✅ aprobado 2026-07-12 (Jeremi Alcalá) |
 
 Abierto trasladado desde el Gate 0: confirmar stakeholders operador/analista (charter).
 
-Al aprobar: cortar `[Unreleased]` → `0.4.0` en CHANGELOG, pasar `test-strategy.md` a `approved`
-y arrancar 05-deployment (Gate 4: pipeline CI con los gates de seguridad, runbook de operación).
+Gate aprobado el 2026-07-12: `[Unreleased]` cortado a `0.4.0` en el CHANGELOG y
+`test-strategy.md` en `approved`. Siguiente fase: 05-deployment (Gate 4 — pipeline CI
+con gates de seguridad, runbook de operación).

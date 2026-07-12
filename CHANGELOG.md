@@ -7,11 +7,17 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-12
+
 ### Añadido
 
 - Fase 04-testing (Gate 3): estrategia de pruebas `docs/04-testing/test-strategy.md` con C4 anotado por frontera (real vs. mock), state-transition testing del ciclo Ingesta (10/10 transiciones con test) y `requirementDiagram` con `verifies` que cierra el círculo requisito↔test del Gate 0; checklist `gates/gate-3-testing.md`.
 - Tests de las transiciones que faltaban (Cargado limpio, Fallido con rollback A1, reproceso de Cuarentena sin acumulación, re-ingesta alterada A4), límites RS02 de hojas/filas, auditoría de logs RS04 y rendimiento RNF01 (archivo trimestral real en 0.04 s < 30 s).
 - Cierre de brechas de la evaluación del Gate 3: 16 negativos del contrato de anclas con hojas falsas duck-typed (T1: cada ancla del layout rota una a una, libro sin hojas, hoja corrupta sin abortar el lote), contrato del comando `descargar` con descargador simulado (incluida la ruta `ErrorDescarga` → exit 3) y estado `cuarentena` con parseo exitoso pero nada cargable. La suite pasa a 78 tests con 99% de cobertura; las 4 líneas restantes quedan justificadas en `test-strategy.md`.
+
+### Cambiado
+
+- Gate 3 (testing) aprobado el 2026-07-12 (Jeremi Alcalá); `test-strategy.md` pasa a `approved`. Abierto trasladado: stakeholders operador/analista en el charter.
 
 - Documentación viva de la fase 03 exigida por la metodología: `docs/03-implementation/repo-history.md` con gitGraph derivado del historial real, bitácora de commits y trazabilidad tag ↔ versión ↔ ADR (auditoría AI-DLC 2026-07-12).
 - Tests en proceso de la CLI y del caso de uso DescargarPeriodo; la suite pasa a 51 tests con cobertura medida del 92% (umbral del catálogo: 80%), incluidos los casos reales ANG y BOB como regresión de la calibración de RF04.
@@ -77,7 +83,8 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 - Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
 
-[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jeremialcala/bcv-fx-ingestor/releases/tag/v0.1.0
