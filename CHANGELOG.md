@@ -9,6 +9,9 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ### Añadido
 
+- Fase 04-testing (Gate 3): estrategia de pruebas `docs/04-testing/test-strategy.md` con C4 anotado por frontera (real vs. mock), state-transition testing del ciclo Ingesta (10/10 transiciones con test) y `requirementDiagram` con `verifies` que cierra el círculo requisito↔test del Gate 0; checklist `gates/gate-3-testing.md`.
+- Tests de las transiciones que faltaban (Cargado limpio, Fallido con rollback A1, reproceso de Cuarentena sin acumulación, re-ingesta alterada A4), límites RS02 de hojas/filas, auditoría de logs RS04 y rendimiento RNF01 (archivo trimestral real en 0.04 s < 30 s). La suite pasa a 59 tests con 94% de cobertura.
+
 - Documentación viva de la fase 03 exigida por la metodología: `docs/03-implementation/repo-history.md` con gitGraph derivado del historial real, bitácora de commits y trazabilidad tag ↔ versión ↔ ADR (auditoría AI-DLC 2026-07-12).
 - Tests en proceso de la CLI y del caso de uso DescargarPeriodo; la suite pasa a 51 tests con cobertura medida del 92% (umbral del catálogo: 80%), incluidos los casos reales ANG y BOB como regresión de la calibración de RF04.
 - Validación operativa del corpus completo 2020-TI → 2026-TIII desde el portal BCV (27 archivos): 1.393 jornadas, 30.784 tasas y 5 cuarentenas — todas anomalías genuinas de la fuente: CHF 31/03/2020 (divergencia 10.32x), BRL 20/07/2020, TRY 21/04/2021 y ARS 05/04/2022 (BID>ASK por dígitos corridos) y ANG 17/11/2021 (valor ausente). La re-ingesta de los 27 archivos produce 0 filas nuevas (métrica del PRD cumplida sobre el corpus real).

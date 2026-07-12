@@ -44,3 +44,17 @@ def test_limite_de_tamano_rs02(fixture_smc, monkeypatch):
     monkeypatch.setattr(lector_xls, "LIMITE_BYTES", 1024)
     with pytest.raises(ArchivoIlegibleError, match="límite"):
         LectorXlsXlrd().parsear(archivo(fixture_smc))
+
+
+def test_limite_de_hojas_rs02(fixture_smc, monkeypatch):
+    monkeypatch.setattr(lector_xls, "LIMITE_HOJAS", 2)  # el fixture tiene 3
+    with pytest.raises(ArchivoIlegibleError, match="hojas"):
+        LectorXlsXlrd().parsear(archivo(fixture_smc))
+
+
+def test_limite_de_filas_manda_hojas_a_cuarentena_rs02(fixture_smc, monkeypatch):
+    monkeypatch.setattr(lector_xls, "LIMITE_FILAS", 20)  # cada hoja tiene 43
+    resultado = LectorXlsXlrd().parsear(archivo(fixture_smc))
+    assert resultado.jornadas == ()
+    assert len(resultado.descartes) == 3
+    assert all("límite" in d.motivo for d in resultado.descartes)

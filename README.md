@@ -12,6 +12,7 @@ Proyecto estructurado con la metodología **AI-DLC** (seguridad por diseño, gat
 | 01-requirements | Gate 0 | ✅ aprobado 2026-07-11 |
 | 02-design | Gate 1 | ✅ aprobado 2026-07-11 |
 | 03-implementation | Gate 2 | ✅ aprobado 2026-07-12 |
+| 04-testing | Gate 3 | evidencia completa, pendiente aprobación humana |
 
 ## Uso
 
@@ -55,8 +56,10 @@ bcv-fx-ingestor/
 │   ├── 02-design/
 │   │   ├── architecture.md                 # Gate 1
 │   │   └── threat-model.md                 # Gate 1
-│   └── 03-implementation/
-│       └── repo-history.md                 # Gate 2 (documentación viva: gitGraph + bitácora)
+│   ├── 03-implementation/
+│   │   └── repo-history.md                 # Gate 2 (documentación viva: gitGraph + bitácora)
+│   └── 04-testing/
+│       └── test-strategy.md                # Gate 3 (pirámide, transiciones, requisito↔test)
 ├── src/bcv_ingest/
 │   ├── dominio/                            # entidades, validador, puertos (Python puro)
 │   ├── aplicacion/                         # casos de uso
