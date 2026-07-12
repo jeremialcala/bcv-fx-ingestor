@@ -9,7 +9,7 @@
 * **Regulación aplicable:** Ninguna (datos públicos oficiales; sin PII)
 
 | Dato | Clasificación | Regulación | Cifrado en reposo | Cifrado en tránsito | Retención |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | Tasas de cambio de referencia (BID/ASK por moneda y jornada) | Público | — | No requerido | HTTPS en descarga | Indefinida (serie histórica) |
 | Archivos SMC originales (`.xls`) | Público | — | No requerido | HTTPS en descarga | Indefinida (evidencia de origen) |
 | Hash SHA-256 y metadatos de ingesta | Interno | — | No requerido | N/A (local) | Indefinida (auditoría) |
