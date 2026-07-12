@@ -1,14 +1,3 @@
-# Historial de implementación — BCV FX Ingestor
-
-* **Estado:** approved
-* **Fecha:** 2026-07-12
-* **Decisores:** Jeremi Alcalá
-* **Fase AI-DLC:** 03-implementation
-* **Versión:** 0.4.0
-* **Gate:** 2
-* **Rama principal:** main
-* **Estrategia de branching:** trunk-based
-
 ## Historial del repositorio (documentación viva)
 
 Derivado de `git log` con `scripts/gitgraph_from_log.py`. Regenerar tras cada merge o tag para
@@ -32,12 +21,16 @@ gitGraph
     commit id: "883d24f"
     commit id: "65df9a3"
     commit id: "631d848" tag: "v0.4.0"
+    commit id: "90f6cdd"
+    commit id: "f036dd8"
 ```
 
 ### Bitácora de cambios (fiel al repo)
 
 | Commit | Tipo | Tags | Autor | Fecha | Mensaje |
 |---|---|---|---|---|---|
+| `f036dd8` | commit | — | Jeremi Alcala | 2026-07-12 | feat: fase 05-deployment — CI con gates de seguridad y despliegue multinube edge-first |
+| `90f6cdd` | commit | — | Jeremi Alcala | 2026-07-12 | docs: regenerar historial vivo tras el tag v0.4.0 |
 | `631d848` | commit | v0.4.0 | Jeremi Alcala | 2026-07-12 | docs: aprobar Gate 3 y cortar versión 0.4.0 |
 | `65df9a3` | commit | — | Jeremi Alcala | 2026-07-12 | test: cerrar las brechas de la evaluación del Gate 3 |
 | `883d24f` | commit | — | Jeremi Alcala | 2026-07-12 | test: fase 04-testing hacia el Gate 3 — estrategia, matriz de transiciones y trazabilidad requisito↔test. |
@@ -52,12 +45,3 @@ gitGraph
 | `da80218` | commit | — | Jeremi Alcala | 2026-07-11 | docs: actualizar changelog y documentación sobre política TLS estricta sin excepciones |
 | `d478480` | commit | — | Jeremi Alcala | 2026-07-11 | docs: confirmar patrón de URLs de descarga del BCV |
 | `6bec837` | commit | v0.1.0 | Jeremi Alcala | 2026-07-11 | docs: documentación inicial AI-DLC (fases 00–02, gates 0 y 1 en review) |
-
-## Trazabilidad tag ↔ versión ↔ decisión
-
-| Tag | Versión CHANGELOG | ADR / feature | Nota |
-|---|---|---|---|
-| v0.1.0 | 0.1.0 (Gate 0) | FX-ING-001 (PRD) | charter, glosario, clasificación de datos, PRD |
-| v0.2.0 | 0.2.0 (Gate 1) | ADR-0001 · ADR-0002 · ADR-0003 · ADR-0004 | diseño, threat model, patrón de URLs confirmado, decisión TLS |
-| v0.3.0 | 0.3.0 (Gate 2) | ADR-0002/0003/0004 implementadas | ingestor completo, RF04 refinado (spread entre bases), truststore |
-| v0.4.0 | 0.4.0 (Gate 3) | FX-ING-001 verificada (RF/RNF/RS ↔ tests) | estrategia de pruebas, matriz de transiciones, RF04 recalibrado con el corpus, 78 tests / 99% |

@@ -109,7 +109,7 @@ jobs:
           load: true
           tags: bcv-fx-ingestor:ci
       - name: trivy image scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: bcv-fx-ingestor:ci
           severity: HIGH,CRITICAL
@@ -157,7 +157,7 @@ jobs:
             kubectl kustomize "$objetivo" | kubeconform -strict -summary -
           done
       - name: trivy config scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: deploy
