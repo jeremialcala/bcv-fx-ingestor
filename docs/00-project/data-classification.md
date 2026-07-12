@@ -4,7 +4,7 @@
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 00-project
-* **Versión:** 0.1.0
+* **Versión:** 0.2.0
 * **Owner de datos (DPO):** Jeremi Alcalá
 * **Regulación aplicable:** Ninguna (datos públicos oficiales; sin PII)
 

@@ -1,10 +1,10 @@
 # ADR-0004: Verificación TLS estricta sin mecanismo de excepción
 
 * **Estado:** accepted
-* **Fecha:** 2026-07-11
+* **Fecha:** 2026-07-12
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
-* **Versión:** 1.0.0
+* **Versión:** 1.1.0
 * **ID:** ADR-0004
 * **Supersede / Superseded-by:** —
 * **Controles OWASP afectados:** A02 (fallas criptográficas), A08 (integridad)

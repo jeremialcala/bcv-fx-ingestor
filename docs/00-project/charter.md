@@ -4,7 +4,7 @@
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá (owner)
 * **Fase AI-DLC:** 00-project
-* **Versión:** 0.1.0
+* **Versión:** 0.2.0
 * **Sponsor:** Jeremi Alcalá
 * **Owner del proyecto:** Jeremi Alcalá
 

@@ -69,6 +69,15 @@ CREATE TABLE IF NOT EXISTS cuarentena (
 
 _ESTADOS_INGERIDOS = (EstadoIngesta.CARGADO.value, EstadoIngesta.CARGADO_PARCIAL.value)
 
+# solo SQL literal: nada de construir queries con strings (RS03)
+_CONSULTAS_CONTEO = {
+    "ingesta": "SELECT COUNT(*) AS n FROM ingesta",
+    "jornada": "SELECT COUNT(*) AS n FROM jornada",
+    "tasa": "SELECT COUNT(*) AS n FROM tasa",
+    "cuarentena": "SELECT COUNT(*) AS n FROM cuarentena",
+    "moneda": "SELECT COUNT(*) AS n FROM moneda",
+}
+
 
 class RepositorioSqlite(RepositorioTasasPort):
     def __init__(self, ruta_db: str | Path) -> None:
@@ -237,9 +246,7 @@ class RepositorioSqlite(RepositorioTasasPort):
         return estado
 
     def _contar(self, tabla: str) -> int:
-        # nombre de tabla de lista fija interna, nunca de entrada del usuario
-        assert tabla in {"ingesta", "jornada", "tasa", "cuarentena", "moneda"}
-        return self._conn.execute(f"SELECT COUNT(*) AS n FROM {tabla}").fetchone()["n"]
+        return self._conn.execute(_CONSULTAS_CONTEO[tabla]).fetchone()["n"]
 
     def cerrar(self) -> None:
         self._conn.close()

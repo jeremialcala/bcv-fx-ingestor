@@ -22,3 +22,15 @@
 Abierto trasladado desde el Gate 0: confirmar stakeholders operador/analista (charter).
 
 Gate aprobado el 2026-07-12: `[Unreleased]` cortado a `0.3.0` en el CHANGELOG. El proyecto pasa a fase de operación (ingesta del corpus completo 2020-TI → presente).
+
+## Anexo — verificación transversal del catálogo AI-DLC (auditoría 2026-07-12)
+
+Checks del catálogo para Gate 2 ejecutados en la auditoría de metodología, posterior a la aprobación:
+
+| Verificación | Resultado | Evidencia |
+|---|---|---|
+| SAST limpio | ✅ bandit: 0 hallazgos (corregidos B608 y B101 en `repositorio_sqlite.py`: conteos como SQL literal) | `bandit -r src` |
+| Dependencias verificadas | ✅ pip-audit: xlrd/httpx/truststore sin vulnerabilidades conocidas; pip del venv actualizado a 26.1.2 | `pip-audit --local` |
+| Cobertura ≥ 80% | ✅ 92% (49 tests; se añadieron tests en proceso de la CLI y del caso de uso DescargarPeriodo) | `pytest --cov=bcv_ingest` |
+| gitGraph derivado del historial real | ✅ `docs/03-implementation/repo-history.md` (grafo + bitácora + trazabilidad tag↔versión↔ADR) | `gitgraph_from_log.py` |
+| Diagramas Mermaid válidos | ✅ 15/15 bloques del repositorio | `validate_mermaid.py` |

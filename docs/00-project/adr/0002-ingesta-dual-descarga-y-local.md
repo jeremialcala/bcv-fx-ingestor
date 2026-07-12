@@ -4,7 +4,7 @@
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
-* **Versión:** 1.0.0
+* **Versión:** 1.1.0
 * **ID:** ADR-0002
 * **Supersede / Superseded-by:** —
 * **Controles OWASP afectados:** A02 (comunicaciones), A08 (integridad)

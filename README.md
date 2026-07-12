@@ -52,9 +52,11 @@ bcv-fx-ingestor/
 │   │       └── 0004-tls-estricto-sin-excepciones.md
 │   ├── 01-requirements/
 │   │   └── ingesta-historicos-fx.md        # PRD (Gate 0)
-│   └── 02-design/
-│       ├── architecture.md                 # Gate 1
-│       └── threat-model.md                 # Gate 1
+│   ├── 02-design/
+│   │   ├── architecture.md                 # Gate 1
+│   │   └── threat-model.md                 # Gate 1
+│   └── 03-implementation/
+│       └── repo-history.md                 # Gate 2 (documentación viva: gitGraph + bitácora)
 ├── src/bcv_ingest/
 │   ├── dominio/                            # entidades, validador, puertos (Python puro)
 │   ├── aplicacion/                         # casos de uso

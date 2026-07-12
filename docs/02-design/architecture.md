@@ -4,7 +4,7 @@
 * **Fecha:** 2026-07-11
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
-* **Versión:** 0.1.0
+* **Versión:** 0.2.0
 * **Gate:** 1
 * **Estilo arquitectónico:** Clean / hexagonal (puertos y adaptadores)
 * **ADRs relacionadas:** ADR-0001, ADR-0002, ADR-0003

@@ -1,10 +1,10 @@
 # Threat Model — BCV FX Ingestor
 
 * **Estado:** approved
-* **Fecha:** 2026-07-11
+* **Fecha:** 2026-07-12
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
-* **Versión:** 0.1.0
+* **Versión:** 0.3.0
 * **Gate:** 1
 * **Alcance:** sistema completo (CLI, núcleo, descarga, SQLite)
 * **Metodología:** STRIDE + DREAD

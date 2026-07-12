@@ -7,39 +7,60 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+### Añadido
+
+- Documentación viva de la fase 03 exigida por la metodología: `docs/03-implementation/repo-history.md` con gitGraph derivado del historial real, bitácora de commits y trazabilidad tag ↔ versión ↔ ADR (auditoría AI-DLC 2026-07-12).
+- Tests en proceso de la CLI y del caso de uso DescargarPeriodo; la suite pasa a 49 tests con cobertura medida del 92% (umbral del catálogo: 80%).
+
+### Corregido
+
+- Auditoría AI-DLC: cabeceras de metadatos sincronizadas con los cortes de versión de los gates (artefactos de fases 00–02 a `0.2.0`/`0.3.0` según su última modificación; ADR-0002 y ADR-0004 a `1.1.0`).
+- Hallazgos SAST de bandit en `repositorio_sqlite.py` (B608 consulta construida con f-string y B101 assert): los conteos usan ahora un mapa de SQL literal.
+
+### Seguridad
+
+- Verificación transversal del Gate 2 según el catálogo AI-DLC: bandit 0 hallazgos, pip-audit sin vulnerabilidades en dependencias de runtime (pip del venv actualizado a 26.1.2) y 15/15 diagramas Mermaid válidos. Anexo de evidencia en `gates/gate-2-implementation.md`.
+
 ## [0.3.0] - 2026-07-12
 
 ### Añadido
+
 - Implementación completa de la fase 03 (`src/bcv_ingest/`, arquitectura hexagonal del diseño aprobado): dominio puro (modelos, catálogo de 23 monedas, tabla de redenominaciones, validador), casos de uso (ingestar, descargar por período, consultar estado), adaptadores (lector xlrd con contrato de anclas, repositorio SQLite con el DDL del contrato, descargador HTTPS estricto, carpeta local) y CLI `bcv-ingest` (descargar/cargar/estado, exit codes 0/2/3, salida JSON).
 - Pirámide de tests (42): 25 unitarios de dominio, 14 de integración (xlrd contra el archivo real, SQLite, httpx simulado) y 3 e2e de la CLI; fixture oficial `tests/fixtures/2_1_2a20_smc.xls` (sha256 `c62e6e43…`).
 - Checklist `gates/gate-2-implementation.md`.
 
 ### Cambiado
+
 - RF04 refinado con evidencia real: la anomalía CHF 31/03/2020 cumple BID≤ASK numéricamente; se añadió la regla de coherencia de spread entre las bases M.E./US$ y Bs./M.E., que es la que la detecta (PRD §Requisitos funcionales).
 - Gate 2 (implementation) aprobado el 2026-07-12 (Jeremi Alcalá); el proyecto pasa a fase de operación. Abierto trasladado: stakeholders operador/analista en el charter.
 
 ### Seguridad
+
 - Verificación E2E real contra el portal: la política de fallo cerrado (ADR-0004) se disparó porque el BCV envía una cadena TLS incompleta; el descargador valida contra el almacén de confianza del SO vía `truststore` (verificación estricta, sin vía de excepción). Documentado en ADR-0004 §Nota de implementación y threat model.
 
 ## [0.2.0] - 2026-07-11
 
 ### Añadido
+
 - Diseño del sistema (`docs/02-design/architecture.md`): C4 Container/Component, secuencia del flujo de ingesta, ciclo de vida de la entidad Ingesta, ER y modelo de dominio hexagonal, contrato de CLI y schema SQLite.
 - Threat model STRIDE + DREAD (`docs/02-design/threat-model.md`) con DFD y quadrant de priorización.
 - ADR-0001 (SQLite como almacén), ADR-0002 (ingesta dual descarga + local), ADR-0003 (parser xlrd con validación de dominio), ADR-0004 (TLS estricto sin mecanismo de excepción).
 - Checklist `gates/gate-1-design.md`.
 
 ### Cambiado
+
 - Patrón de URLs de descarga del BCV confirmado contra el portal (2026-07-11) y documentado en PRD, ADR-0002 y glosario: `2_1_2{t}{AA}_smc.xls` por trimestre (`a`–`d` = I–IV), histórico desde 2020-TI, 404 en períodos inexistentes. Resuelve el abierto correspondiente del Gate 0.
 - Threat model: evidencia registrada de que el certificado TLS actual del portal valida correctamente.
 - Gates 0 (requirements) y 1 (design) aprobados el 2026-07-11 (Jeremi Alcalá); artefactos de las fases 00–02 pasan a `approved`. Abierto trasladado: stakeholders operador/analista en el charter.
 
 ### Seguridad
+
 - Decisión HITL (2026-07-11): política TLS de fallo cerrado — ante certificado inválido del portal BCV el proceso falla siempre, sin flag `--inseguro` ni vía de excepción; respaldo operativo por modo local. Documentada en ADR-0004 y propagada a threat model (T2), arquitectura (§Patrones de seguridad) y PRD (RS01). Cierra el criterio 9 del Gate 1.
 
 ## [0.1.0] - 2026-07-11
 
 ### Añadido
+
 - Charter del proyecto con mindmap de alcance (`docs/00-project/charter.md`).
 - Glosario / lenguaje ubicuo del dominio cambiario BCV (`docs/00-project/glossary.md`).
 - Clasificación de datos (`docs/00-project/data-classification.md`).
@@ -47,6 +68,7 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 - Checklist `gates/gate-0-requirements.md`.
 
 ### Seguridad
+
 - Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
 
 [Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.3.0...HEAD
