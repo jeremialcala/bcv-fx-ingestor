@@ -9,7 +9,7 @@
 | # | Criterio | Evidencia | Estado |
 |---|---|---|---|
 | 1 | Pipeline CI con los gates de seguridad, limpio | `.github/workflows/ci.yml` (tests py3.11/3.12, sast, sca, secrets, license, docs, container, iac) — [corrida verde 2026-07-12](https://github.com/jeremialcala/bcv-fx-ingestor/actions/runs/29204893721) | ✅ |
-| 2 | DAST | N/A justificado: sin superficie de red entrante; equivalente dinámico = `smoke.yml` semanal contra el portal real + tests de entrada hostil del Gate 3 | ✅ N/A |
+| 2 | DAST | N/A justificado: sin superficie de red entrante; equivalente dinámico = `smoke.yml` contra el portal real ([corrida verde 2026-07-12](https://github.com/jeremialcala/bcv-fx-ingestor/actions/runs/29205475587): 3 jornadas, 68 tasas, cuarentena CHF verificadas en el runner) + tests de entrada hostil del Gate 3 | ✅ N/A |
 | 3 | IaC escaneado | kubeconform estricto (base + 2 overlays: 3/3 válidos) + Trivy config (0 misconfiguraciones HIGH/CRITICAL) — local y como job `iac` | ✅ |
 | 4 | Imagen de contenedor escaneada | Trivy image: 0 vulnerabilidades HIGH/CRITICAL con fix; no-root (uid 10001); verificada contra el portal real (descarga TLS estricta + ingesta dentro del contenedor) | ✅ |
 | 5 | Runbook de despliegue y rollback | `deployment.md` §Runbook (inicial, actualización, rollback de imagen/datos/Worker, verificación post-deploy) | ✅ |
