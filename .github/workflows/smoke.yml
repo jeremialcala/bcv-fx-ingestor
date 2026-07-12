@@ -20,6 +20,12 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e .
+      - name: instalar el intermedio de Sectigo en el runner
+        # el BCV envía una cadena TLS incompleta y OpenSSL no hace AIA fetching;
+        # mismo remedio que en la imagen (deploy/docker/ca-extra/README.md)
+        run: |
+          sudo cp deploy/docker/ca-extra/*.crt /usr/local/share/ca-certificates/
+          sudo update-ca-certificates
       - name: descargar e ingerir 2020-TI desde el portal
         run: |
           rc=0
