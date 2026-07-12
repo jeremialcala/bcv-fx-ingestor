@@ -1,3 +1,14 @@
+# Historial de implementación — BCV FX Ingestor
+
+* **Estado:** approved
+* **Fecha:** 2026-07-12
+* **Decisores:** Jeremi Alcalá
+* **Fase AI-DLC:** 03-implementation
+* **Versión:** 0.4.0
+* **Gate:** 2
+* **Rama principal:** main
+* **Estrategia de branching:** trunk-based
+
 ## Historial del repositorio (documentación viva)
 
 Derivado de `git log` con `scripts/gitgraph_from_log.py`. Regenerar tras cada merge o tag para
@@ -45,3 +56,12 @@ gitGraph
 | `da80218` | commit | — | Jeremi Alcala | 2026-07-11 | docs: actualizar changelog y documentación sobre política TLS estricta sin excepciones |
 | `d478480` | commit | — | Jeremi Alcala | 2026-07-11 | docs: confirmar patrón de URLs de descarga del BCV |
 | `6bec837` | commit | v0.1.0 | Jeremi Alcala | 2026-07-11 | docs: documentación inicial AI-DLC (fases 00–02, gates 0 y 1 en review) |
+
+## Trazabilidad tag ↔ versión ↔ decisión
+
+| Tag | Versión CHANGELOG | ADR / feature | Nota |
+|---|---|---|---|
+| v0.1.0 | 0.1.0 (Gate 0) | FX-ING-001 (PRD) | charter, glosario, clasificación de datos, PRD |
+| v0.2.0 | 0.2.0 (Gate 1) | ADR-0001 · ADR-0002 · ADR-0003 · ADR-0004 | diseño, threat model, patrón de URLs confirmado, decisión TLS |
+| v0.3.0 | 0.3.0 (Gate 2) | ADR-0002/0003/0004 implementadas | ingestor completo, RF04 refinado (spread entre bases), truststore |
+| v0.4.0 | 0.4.0 (Gate 3) | FX-ING-001 verificada (RF/RNF/RS ↔ tests) | estrategia de pruebas, matriz de transiciones, RF04 recalibrado con el corpus, 78 tests / 99% |
