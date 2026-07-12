@@ -4,7 +4,7 @@
 * **Fecha:** 2026-07-12
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 03-implementation
-* **Versión:** 0.3.0
+* **Versión:** 0.4.0
 * **Gate:** 2
 * **Rama principal:** main
 * **Estrategia de branching:** trunk-based
@@ -29,12 +29,18 @@ gitGraph
     commit id: "da1582f"
     commit id: "23d47f4"
     commit id: "95ea337"
+    commit id: "883d24f"
+    commit id: "65df9a3"
+    commit id: "631d848" tag: "v0.4.0"
 ```
 
 ### Bitácora de cambios (fiel al repo)
 
 | Commit | Tipo | Tags | Autor | Fecha | Mensaje |
 |---|---|---|---|---|---|
+| `631d848` | commit | v0.4.0 | Jeremi Alcala | 2026-07-12 | docs: aprobar Gate 3 y cortar versión 0.4.0 |
+| `65df9a3` | commit | — | Jeremi Alcala | 2026-07-12 | test: cerrar las brechas de la evaluación del Gate 3 |
+| `883d24f` | commit | — | Jeremi Alcala | 2026-07-12 | test: fase 04-testing hacia el Gate 3 — estrategia, matriz de transiciones y trazabilidad requisito↔test. |
 | `95ea337` | commit | — | Jeremi Alcala | 2026-07-12 | fix: recalibrar la regla de coherencia de spread de RF04 contra el corpus completo |
 | `23d47f4` | commit | — | Jeremi Alcala | 2026-07-12 | chore: excluir .coverage del repositorio |
 | `da1582f` | commit | — | Jeremi Alcala | 2026-07-12 | docs: auditoría AI-DLC — documentación viva de fase 03, versiones sincronizadas y hallazgos SAST corregidos |
@@ -54,3 +60,4 @@ gitGraph
 | v0.1.0 | 0.1.0 (Gate 0) | FX-ING-001 (PRD) | charter, glosario, clasificación de datos, PRD |
 | v0.2.0 | 0.2.0 (Gate 1) | ADR-0001 · ADR-0002 · ADR-0003 · ADR-0004 | diseño, threat model, patrón de URLs confirmado, decisión TLS |
 | v0.3.0 | 0.3.0 (Gate 2) | ADR-0002/0003/0004 implementadas | ingestor completo, RF04 refinado (spread entre bases), truststore |
+| v0.4.0 | 0.4.0 (Gate 3) | FX-ING-001 verificada (RF/RNF/RS ↔ tests) | estrategia de pruebas, matriz de transiciones, RF04 recalibrado con el corpus, 78 tests / 99% |
