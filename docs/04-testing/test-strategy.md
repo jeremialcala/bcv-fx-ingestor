@@ -6,7 +6,7 @@
 * **Fase AI-DLC:** 04-testing
 * **Versión:** 0.4.0
 * **Gate:** 3
-* **Pirámide:** 27 unit · 28 integración · 4 e2e (59 tests, cobertura 94%)
+* **Pirámide:** 43 unit · 31 integración · 4 e2e (78 tests, cobertura 99%)
 * **SLO de rendimiento (ref):** RNF01 — archivo trimestral < 30 s
 
 ## Pirámide y fronteras (¿qué es real y qué es mock?)
@@ -17,8 +17,8 @@ archivo oficial del BCV como fixture (`tests/fixtures/2_1_2a20_smc.xls`, sha256 
 
 | Nivel | Frontera | Real | Simulado | Tests |
 |---|---|---|---|---|
-| Unit | Dominio puro (validador, períodos, redenominaciones, catálogo) | Reglas con valores reales del corpus (CHF, ANG, BOB) | nada | 27 |
-| Integración | Adaptadores contra sus tecnologías | xlrd + archivo oficial; SQLite real (constraints, FK, inyección); casos de uso con repositorio real | `httpx.MockTransport` (200/404/503/error TLS); `LectorFalso` para transiciones de estado | 28 |
+| Unit | Dominio puro + contrato de anclas del parser | Reglas con valores reales del corpus (CHF, ANG, BOB) | hojas falsas duck-typed que rompen cada ancla del layout una a una (negativos de T1, `test_lector_anclas.py`) | 43 |
+| Integración | Adaptadores contra sus tecnologías | xlrd + archivo oficial; SQLite real (constraints, FK, inyección); casos de uso con repositorio real | `httpx.MockTransport` (200/404/503/error TLS); `LectorFalso` para transiciones; descargador falso para el contrato `descargar` (exit 3 incluido) | 31 |
 | E2E / contrato | CLI como proceso (`subprocess`) | Exit codes 0/2/3 y JSON del contrato, archivo oficial real | nada | 4 |
 | Operativa | Portal BCV real | Descarga del corpus completo (27 archivos), TLS estricto, 404 limpio | — | evidencia en Gate 2/3 |
 
@@ -218,7 +218,7 @@ re-ingesta del corpus completo con 0 filas nuevas.
 
 | Abuso | Test |
 |---|---|
-| A1 — archivo malformado/malicioso | `test_archivo_no_xls_es_ilegible`, `test_cargar_archivo_corrupto`, límites RS02, `test_transicion_a_fallido_revierte_todo` (sin cargas parciales) |
+| A1 — archivo malformado/malicioso | `test_archivo_no_xls_es_ilegible`, `test_cargar_archivo_corrupto`, límites RS02, `test_lector_anclas.py` (16 negativos: cada ancla del layout rota una a una, libro sin hojas, hoja que revienta sin abortar el lote), `test_transicion_a_fallido_revierte_todo` (sin cargas parciales) |
 | A2 — suplantación de fuente | `test_fallo_de_transporte_reintenta_y_falla_cerrado` (TLS cerrado, sin bypass) + verificación real contra el portal |
 | A3 — datos fuente inconsistentes | `test_caso_real_chf_31_03_2020_va_a_cuarentena` (+ 5 anomalías reales detectadas en el corpus) |
 | A4 — re-ingesta manipulada | `test_reingesta_alterada_no_sobreescribe_a4` |
@@ -232,6 +232,14 @@ no hay endpoint que escanear con DAST. El equivalente dinámico aplicado es: ent
 real al parser (A1/A5), verificación TLS contra el portal real en vivo (la política de fallo
 cerrado se disparó y se corrigió el almacén de confianza, ADR-0004) y SAST + auditoría de
 dependencias del anexo del Gate 2.
+
+## Líneas sin cubrir aceptadas (4 de 656, cobertura 99%)
+
+| Línea | Qué es | Por qué se acepta |
+|---|---|---|
+| `lector_xls.py:155` | Guardia de `_fecha_en_fila` para hojas de ≤ 4 filas | Inalcanzable: el ancla "hoja demasiado corta" (≤ 8 filas) rechaza antes |
+| `cli.py:134,138` | Wrapper `run()` y bloque `__main__` | Se ejercitan vía `subprocess` en los e2e; coverage no mide procesos hijos |
+| `redenominaciones.py:23` | `AssertionError` defensivo | Inalcanzable: la tabla de vigencias termina en `date.min` |
 
 ## Rendimiento (SLO RNF01)
 

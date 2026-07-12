@@ -3,7 +3,10 @@ import json
 
 import pytest
 
+from bcv_ingest import cli
+from bcv_ingest.adaptadores.integridad import sha256_de
 from bcv_ingest.cli import main
+from bcv_ingest.dominio.modelos import ArchivoSmc, ErrorDescarga, OrigenArchivo, Periodo
 
 
 def ejecutar(capsys, *argumentos):
@@ -44,6 +47,45 @@ def test_cargar_carpeta_completa(tmp_path, fixture_smc, capsys):
     estados = {r["archivo"]: r["estado"] for r in resumenes}
     assert estados["2_1_2a20_smc.xls"] == "cargado_parcial"
     assert estados["corrupto.xls"] == "cuarentena"  # RF06: el lote no se aborta
+
+
+def test_descargar_ingiere_y_reporta_no_publicados(tmp_path, fixture_smc, capsys, monkeypatch):
+    # contrato del comando descargar sin tocar la red: solo 2020-TI "publicado"
+    class DescargadorFalso:
+        def __init__(self, destino):
+            pass
+
+        def obtener(self, periodo=None):
+            if periodo == Periodo(2020, 1):
+                yield ArchivoSmc(
+                    ruta=fixture_smc, sha256=sha256_de(fixture_smc), origen=OrigenArchivo.DESCARGA
+                )
+
+    monkeypatch.setattr(cli, "DescargadorHttpBcv", DescargadorFalso)
+    codigo, resultados = ejecutar(
+        capsys, "--db", str(tmp_path / "fx.db"),
+        "descargar", "--desde", "2020-01", "--hasta", "2020-06",
+    )
+    assert codigo == 2  # la cuarentena CHF manda exit 2
+    estados = {r["periodo"]: r["estado"] for r in resultados}
+    assert estados == {"2020-TI": "cargado_parcial", "2020-TII": "no_publicado"}
+
+
+def test_descargar_con_fallo_de_red_sale_con_3(tmp_path, capsys, monkeypatch):
+    class DescargadorRoto:
+        def __init__(self, destino):
+            pass
+
+        def obtener(self, periodo=None):
+            raise ErrorDescarga("fallo de red o TLS simulado")
+
+    monkeypatch.setattr(cli, "DescargadorHttpBcv", DescargadorRoto)
+    codigo, salida = ejecutar(
+        capsys, "--db", str(tmp_path / "fx.db"),
+        "descargar", "--desde", "2020-01", "--hasta", "2020-03",
+    )
+    assert codigo == 3  # contrato: error de red
+    assert "fallo de red" in salida["error"]
 
 
 def test_ruta_inexistente_sale_con_2(tmp_path):

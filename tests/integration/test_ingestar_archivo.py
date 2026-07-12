@@ -16,11 +16,12 @@ from bcv_ingest.dominio.validador import ValidadorDominio
 
 
 class LectorFalso(LectorTasasPort):
-    def __init__(self, jornadas):
+    def __init__(self, jornadas, descartes=()):
         self._jornadas = tuple(jornadas)
+        self._descartes = tuple(descartes)
 
     def parsear(self, archivo):
-        return ResultadoParseo(jornadas=self._jornadas, descartes=())
+        return ResultadoParseo(jornadas=self._jornadas, descartes=self._descartes)
 
 
 def jornada_limpia(fecha=date(2020, 3, 31)):
@@ -103,6 +104,30 @@ def test_reingesta_alterada_no_sobreescribe_a4(repo):
     assert resumen.duplicadas == 2  # nada se sobreescribe en silencio
     jornada = repo.estado_general(date(2020, 3, 31))["jornada"]
     assert jornada["tasas"] == 2  # sigue trazando a la ingesta original
+
+
+def test_parseo_sin_nada_cargable_queda_en_cuarentena(repo):
+    # el archivo parsea pero todo su contenido es inválido: descartes del lector
+    # (ancla rota) + jornada que el validador rechaza entero → estado cuarentena
+    invalida = JornadaCruda(
+        hoja="01042020",
+        fecha_operacion=date(2020, 4, 1),
+        fecha_valor=date(2020, 3, 31),  # fecha_valor anterior: hoja rechazada
+        publicado_en=None,
+        tasas=(TasaCruda("USD", "E.U.A.", 1.0, 1.0, 80743.36, 80945.72, fila=14),),
+    )
+    from bcv_ingest.dominio.modelos import ItemCuarentena
+
+    lector = LectorFalso(
+        [invalida], descartes=[ItemCuarentena(hoja="31032020", motivo="ancla de layout no coincide")]
+    )
+    caso = IngestarArchivoUseCase(lector, ValidadorDominio(), repo)
+    resumen = caso.ejecutar(archivo())
+
+    assert resumen.estado == "cuarentena"
+    assert resumen.jornadas_cargadas == 0
+    assert len(resumen.cuarentenas) == 2  # el descarte del lector + la hoja inválida
+    assert repo.estado_general()["totales"]["cuarentenas_pendientes"] == 2
 
 
 def test_cuarentena_queda_auditada_en_logs_rs04(repo, fixture_smc, caplog):
