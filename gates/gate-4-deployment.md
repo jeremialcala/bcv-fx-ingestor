@@ -1,6 +1,6 @@
 # Gate 4 — Deployment
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-12
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 05-deployment
@@ -17,7 +17,7 @@
 | 7 | Multinube + edge operables | Overlays EKS/GKE (kubeconform OK), Worker validado con `wrangler deploy --dry-run` (binding R2 correcto) | ✅ |
 | 8 | ADRs de las decisiones | ADR-0005 (CI GitHub Actions), ADR-0006 (multinube edge-first; Worker-API rechazada por no-scope) | ✅ |
 | 9 | Badges y CHANGELOG al día | README con badge de última ejecución del CI + último tag; `[Unreleased]` con la fase 05 | ✅ |
-| 10 | **Aprobación humana del gate** | — | ⬜ pendiente (HITL) |
+| 10 | **Aprobación humana del gate** | — | ✅ aprobado 2026-07-12 (Jeremi Alcalá) |
 
 Hallazgo de la fase (documentado): dentro del contenedor Linux, OpenSSL no resuelve la cadena
 incompleta del BCV vía AIA como Windows; la imagen vendoriza el intermedio público de Sectigo
@@ -25,5 +25,6 @@ incompleta del BCV vía AIA como Windows; la imagen vendoriza el intermedio púb
 
 Abierto trasladado desde el Gate 0: confirmar stakeholders operador/analista (charter).
 
-Al aprobar: cortar `[Unreleased]` → `0.5.0` en CHANGELOG (sincronizando `pyproject.version`),
-tag `v0.5.0` (publica la imagen a GHCR) y arrancar 06-monitoring (Gate 5 → 1.0.0).
+Gate aprobado el 2026-07-12: `[Unreleased]` cortado a `0.5.0` (con `pyproject.version`
+sincronizado) y tag `v0.5.0` — su corrida de CI publica la imagen a GHCR. Siguiente fase:
+06-monitoring (Gate 5 → 1.0.0).

@@ -7,6 +7,8 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-12
+
 ### Añadido
 
 - Fase 05-deployment (Gate 4): pipeline CI en GitHub Actions con los gates de seguridad de la metodología — tests (matriz 3.11/3.12, cobertura ≥ 90%), SAST (bandit), SCA (pip-audit), secrets (gitleaks), license (allowlist), docs (Mermaid), container (build + Trivy, push a GHCR en tags con verificación tag == versión) e IaC (kubeconform + Trivy config); smoke semanal no bloqueante contra el portal real (`smoke.yml`). Badges de CI, smoke y última versión en el README.
@@ -14,9 +16,14 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 - `docs/05-deployment/deployment.md` (C4Deployment, flowchart del pipeline con rollback, gantt de cutover, runbook), ADR-0005 (CI GitHub Actions), ADR-0006 (multinube edge-first) y checklist `gates/gate-4-deployment.md`.
 - Scripts vendorizados al repo para CI y documentación viva: `scripts/validate_mermaid.py` (fix npm en Windows, caché configurable) y `scripts/gitgraph_from_log.py` (fix de encoding UTF-8).
 
+### Cambiado
+
+- Gate 4 (deployment) aprobado el 2026-07-12 (Jeremi Alcalá); `deployment.md` pasa a `approved` y el tag `v0.5.0` publica la primera imagen oficial a GHCR. Abierto trasladado: stakeholders operador/analista en el charter.
+
 ### Corregido
 
-- `pyproject.version` desincronizado (0.3.0 → 0.4.0); en adelante el job `container` del CI verifica que cada tag `vX.Y.Z` coincida con la versión del paquete.
+- `pyproject.version` desincronizado (0.3.0 → 0.4.0, y 0.5.0 con este corte); en adelante el job `container` del CI verifica que cada tag `vX.Y.Z` coincida con la versión del paquete.
+- Smoke: el runner de Ubuntu necesita el intermedio de Sectigo instalado (mismo hallazgo TLS que el contenedor); la primera corrida roja fue el fallo cerrado actuando según diseño.
 
 ### Seguridad
 
@@ -98,7 +105,8 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 - Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
 
-[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.1.0...v0.2.0
