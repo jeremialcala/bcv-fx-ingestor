@@ -62,7 +62,7 @@ mindmap
 ## Stakeholders
 
 | Rol | Nombre | Responsabilidad |
-|---|---|---|
+| --- | --- | --- |
 | Sponsor / Owner | Jeremi Alcalá | Decisiones de alcance, aprobación de gates |
 | Operador de datos | <TODO: confirmar> | Ejecuta ingestas, resuelve cuarentenas |
 | Analista consumidor | <TODO: confirmar> | Consume la serie histórica desde SQLite |

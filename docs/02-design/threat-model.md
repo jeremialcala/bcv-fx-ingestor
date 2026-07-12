@@ -50,7 +50,7 @@ Cruces de trust boundary: (1) BCV→Descargador (red externa), (2) Operador→Ca
 ## Análisis STRIDE
 
 | Componente | Spoofing | Tampering | Repudiation | Info Disclosure | DoS | Elevation |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | Descargador HTTPS | Suplantación del portal BCV (T2) | XLS alterado en tránsito (T2) | Sin registro de origen/hash (RS04) | — | Portal caído / throttling (T8) | — |
 | Carpeta de entrada | Archivo con nombre oficial pero contenido ajeno (T4) | Reemplazo de archivo ya ingerido (T4) | ¿Quién colocó el archivo? → log | — | Carpeta inundada de archivos | — |
 | Lector XLS (xlrd) | — | Layout manipulado carga datos corridos (T1) | — | Metadatos OLE con nombres de personas | Bomba de celdas / BIFF corrupto (T5) | Explotación de bug del parser (T5) |
@@ -82,7 +82,7 @@ quadrantChart
 Escala 1–10 por dimensión; Score = promedio.
 
 | ID | Amenaza | D | R | E | A | D | Score | Control / ADR |
-|---|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | T1 | Cambio de layout del XLS carga datos corridos sin error | 9 | 9 | 7 | 8 | 6 | 7.8 | Contrato de layout verificado + cuarentena (ADR-0003) |
 | T3 | Datos erróneos de la fuente cargados como válidos (caso CHF) | 8 | 10 | 8 | 8 | 5 | 7.8 | Validador BID≤ASK, rangos, desviación (ADR-0003) |
 | T7 | Series con escalas mezcladas por redenominación | 8 | 8 | 6 | 8 | 5 | 7.0 | `escala_monetaria` por jornada (architecture.md) |
@@ -94,7 +94,8 @@ Escala 1–10 por dimensión; Score = promedio.
 
 ## Controles y trazabilidad
 
-- Cada amenaza ≥ 6.0 tiene control en `architecture.md` §Patrones de seguridad y ADR asociada; ninguna queda sin dueño.
-- Decisión HITL (2026-07-11, Jeremi Alcalá): ante certificado TLS inválido del portal BCV el proceso **falla siempre**; no existe flag `--inseguro` ni vía de excepción. Respaldo operativo: modo local. Ver ADR-0004.
-  - Evidencia (2026-07-11): el certificado actual de `www.bcv.org.ve` valida correctamente contra el almacén de confianza del sistema (verificado con HEAD sobre HTTPS sin excepciones).
-- T8 se acepta parcialmente (riesgo operativo, no de seguridad); mitigación por modo local.
+* Cada amenaza ≥ 6.0 tiene control en `architecture.md` §Patrones de seguridad y ADR asociada; ninguna queda sin dueño.
+* Decisión HITL (2026-07-11, Jeremi Alcalá): ante certificado TLS inválido del portal BCV el proceso **falla siempre**; no existe flag `--inseguro` ni vía de excepción. Respaldo operativo: modo local. Ver ADR-0004.
+  * Evidencia (2026-07-11): el certificado actual de `www.bcv.org.ve` valida correctamente contra el almacén de confianza del sistema (verificado con HEAD sobre HTTPS sin excepciones).
+  * Evidencia (2026-07-12): el servidor del BCV envía una cadena TLS incompleta (intermedio de otra CA); el bundle certifi no valida pero el almacén del SO sí (resuelve el intermedio vía AIA). El descargador valida contra el almacén del SO con `truststore`, manteniendo la política de fallo cerrado — ver nota de implementación en ADR-0004.
+* T8 se acepta parcialmente (riesgo operativo, no de seguridad); mitigación por modo local.

@@ -82,7 +82,7 @@ journey
 - RF01: Descargar archivos SMC históricos del portal BCV por rango de fechas, sin re-descargar los ya ingeridos.
 - RF02: Ingerir archivos `.xls` desde una carpeta local de entrada.
 - RF03: Parsear cada hoja `DDMMYYYY`: fecha operación, fecha valor, momento de publicación y, por moneda, BID/ASK en M.E./US$ y Bs./M.E.
-- RF04: Validar reglas de dominio: BID ≤ ASK, valores > 0, código de moneda conocido, fechas coherentes (valor ≥ operación).
+- RF04: Validar reglas de dominio: BID ≤ ASK, valores > 0, código de moneda conocido, fechas coherentes (valor ≥ operación) y coherencia del spread BID/ASK entre las dos bases de cotización. *(Refinamiento 2026-07-12, verificado contra el archivo real: el caso CHF 31/03/2020 cumple BID≤ASK numéricamente — 0.96273 ≤ 9.96296 —; lo que delata el error es que el spread en M.E./US$ (~935%) es incoherente con el de Bs./M.E. (~0,25%) de la misma fila.)*
 - RF05: Cargar a SQLite de forma idempotente (UNIQUE por jornada+moneda; hash SHA-256 por archivo).
 - RF06: Enviar a cuarentena archivos/filas inválidos con motivo trazable, sin abortar el lote completo.
 - RF07: Registrar la escala monetaria vigente de cada jornada (redenominaciones 2018 y 2021).

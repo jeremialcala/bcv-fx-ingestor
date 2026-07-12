@@ -7,6 +7,17 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+### Añadido
+- Implementación completa de la fase 03 (`src/bcv_ingest/`, arquitectura hexagonal del diseño aprobado): dominio puro (modelos, catálogo de 23 monedas, tabla de redenominaciones, validador), casos de uso (ingestar, descargar por período, consultar estado), adaptadores (lector xlrd con contrato de anclas, repositorio SQLite con el DDL del contrato, descargador HTTPS estricto, carpeta local) y CLI `bcv-ingest` (descargar/cargar/estado, exit codes 0/2/3, salida JSON).
+- Pirámide de tests (42): 25 unitarios de dominio, 14 de integración (xlrd contra el archivo real, SQLite, httpx simulado) y 3 e2e de la CLI; fixture oficial `tests/fixtures/2_1_2a20_smc.xls` (sha256 `c62e6e43…`).
+- Checklist `gates/gate-2-implementation.md`.
+
+### Cambiado
+- RF04 refinado con evidencia real: la anomalía CHF 31/03/2020 cumple BID≤ASK numéricamente; se añadió la regla de coherencia de spread entre las bases M.E./US$ y Bs./M.E., que es la que la detecta (PRD §Requisitos funcionales).
+
+### Seguridad
+- Verificación E2E real contra el portal: la política de fallo cerrado (ADR-0004) se disparó porque el BCV envía una cadena TLS incompleta; el descargador valida contra el almacén de confianza del SO vía `truststore` (verificación estricta, sin vía de excepción). Documentado en ADR-0004 §Nota de implementación y threat model.
+
 ## [0.2.0] - 2026-07-11
 
 ### Añadido

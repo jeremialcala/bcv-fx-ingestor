@@ -30,3 +30,15 @@ Verificación TLS estricta con fallo cerrado: ante cualquier certificado inváli
 - Positivas: el control de T2 pasa de "excepción solo HITL" a "sin excepción"; el descargador no contiene rutas inseguras que auditar ni configurar.
 - Negativas / deuda asumida: si el portal vuelve a presentar certificado inválido por un período prolongado, toda ingesta nueva requiere el paso manual del modo local.
 - Impacto en threat model: T2 queda mitigado en la vía descarga; el riesgo residual se desplaza al procedimiento manual del operador, cubierto por el pipeline único (hash SHA-256 + validaciones idénticas, ADR-0002).
+
+## Nota de implementación (2026-07-12)
+
+En la verificación E2E real, la política de fallo cerrado se disparó: el servidor del
+BCV envía una cadena TLS incompleta (adjunta un intermedio de otra CA distinta a la
+emisora del certificado hoja, verificado con `openssl s_client`), por lo que el bundle
+certifi de Python no puede construir la cadena, mientras que el verificador del sistema
+operativo resuelve el intermedio correcto vía AIA (por eso curl y los navegadores
+validan sin error). El descargador valida contra el almacén de confianza del SO
+mediante `truststore` (`SSLContext` con `check_hostname` y `CERT_REQUIRED`): sigue
+siendo verificación estricta sin vía de excepción — solo cambia el almacén de
+confianza, no la política.
