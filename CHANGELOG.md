@@ -10,11 +10,13 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 ### Añadido
 
 - Documentación viva de la fase 03 exigida por la metodología: `docs/03-implementation/repo-history.md` con gitGraph derivado del historial real, bitácora de commits y trazabilidad tag ↔ versión ↔ ADR (auditoría AI-DLC 2026-07-12).
-- Tests en proceso de la CLI y del caso de uso DescargarPeriodo; la suite pasa a 49 tests con cobertura medida del 92% (umbral del catálogo: 80%).
+- Tests en proceso de la CLI y del caso de uso DescargarPeriodo; la suite pasa a 51 tests con cobertura medida del 92% (umbral del catálogo: 80%), incluidos los casos reales ANG y BOB como regresión de la calibración de RF04.
+- Validación operativa del corpus completo 2020-TI → 2026-TIII desde el portal BCV (27 archivos): 1.393 jornadas, 30.784 tasas y 5 cuarentenas — todas anomalías genuinas de la fuente: CHF 31/03/2020 (divergencia 10.32x), BRL 20/07/2020, TRY 21/04/2021 y ARS 05/04/2022 (BID>ASK por dígitos corridos) y ANG 17/11/2021 (valor ausente). La re-ingesta de los 27 archivos produce 0 filas nuevas (métrica del PRD cumplida sobre el corpus real).
 
 ### Corregido
 
 - Auditoría AI-DLC: cabeceras de metadatos sincronizadas con los cortes de versión de los gates (artefactos de fases 00–02 a `0.2.0`/`0.3.0` según su última modificación; ADR-0002 y ADR-0004 a `1.1.0`).
+- Regla de coherencia de spread de RF04 recalibrada contra el corpus completo (2026-07-12): divergencia multiplicativa entre bases con umbral 1.25 en lugar de diferencia absoluta 0.05. La primera ingesta del corpus produjo 517 falsos positivos (ANG en banda oficial ~5,3% desde 2023, BOB ~5,6% en 2024-2025) que la regla recalibrada elimina conservando la detección de errores reales (divergencia mínima observada en error genuino: 10.32x).
 - Hallazgos SAST de bandit en `repositorio_sqlite.py` (B608 consulta construida con f-string y B101 assert): los conteos usan ahora un mapa de SQL literal.
 
 ### Seguridad

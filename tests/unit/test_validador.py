@@ -45,6 +45,30 @@ def test_caso_real_chf_31_03_2020_va_a_cuarentena():
     assert len(valida.tasas) == 1  # la fila sana de la misma hoja sí se carga (RF06)
 
 
+def test_ang_con_banda_legitima_ancha_pasa():
+    # caso real 06/07/2026: el florín de Curazao cotiza en banda oficial ~5,3%
+    # estable desde 2023; no es un error de la fuente (501 falsos positivos con
+    # la regla de diferencia absoluta que este umbral corrige)
+    ang = tasa(codigo="ANG", pais="Curazao",
+               usd_bid=1.7441, usd_ask=1.8363, bs_bid=386.01, bs_ask=386.98)
+    valida, cuarentena = ValidadorDominio().validar(
+        jornada([ang], fecha_operacion=date(2026, 7, 6), fecha_valor=date(2026, 7, 7))
+    )
+    assert cuarentena == []
+    assert len(valida.tasas) == 1
+
+
+def test_bob_con_spread_legitimo_ancho_pasa():
+    # caso real 02/12/2024: spread ~5,7% sostenido por la escasez de divisas
+    bob = tasa(codigo="BOB", pais="Bolivia",
+               usd_bid=6.7168, usd_ask=7.0967, bs_bid=328.31, bs_ask=329.13)
+    valida, cuarentena = ValidadorDominio().validar(
+        jornada([bob], fecha_operacion=date(2024, 12, 2), fecha_valor=date(2024, 12, 3))
+    )
+    assert cuarentena == []
+    assert len(valida.tasas) == 1
+
+
 def test_chf_corregido_pasa():
     chf = tasa(codigo="CHF", usd_bid=0.96273, usd_ask=0.96296,
                bs_bid=83869.16, bs_ask=84079.36)
