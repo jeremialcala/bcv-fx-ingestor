@@ -7,6 +7,8 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-12
+
 ### Añadido
 - Implementación completa de la fase 03 (`src/bcv_ingest/`, arquitectura hexagonal del diseño aprobado): dominio puro (modelos, catálogo de 23 monedas, tabla de redenominaciones, validador), casos de uso (ingestar, descargar por período, consultar estado), adaptadores (lector xlrd con contrato de anclas, repositorio SQLite con el DDL del contrato, descargador HTTPS estricto, carpeta local) y CLI `bcv-ingest` (descargar/cargar/estado, exit codes 0/2/3, salida JSON).
 - Pirámide de tests (42): 25 unitarios de dominio, 14 de integración (xlrd contra el archivo real, SQLite, httpx simulado) y 3 e2e de la CLI; fixture oficial `tests/fixtures/2_1_2a20_smc.xls` (sha256 `c62e6e43…`).
@@ -14,6 +16,7 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ### Cambiado
 - RF04 refinado con evidencia real: la anomalía CHF 31/03/2020 cumple BID≤ASK numéricamente; se añadió la regla de coherencia de spread entre las bases M.E./US$ y Bs./M.E., que es la que la detecta (PRD §Requisitos funcionales).
+- Gate 2 (implementation) aprobado el 2026-07-12 (Jeremi Alcalá); el proyecto pasa a fase de operación. Abierto trasladado: stakeholders operador/analista en el charter.
 
 ### Seguridad
 - Verificación E2E real contra el portal: la política de fallo cerrado (ADR-0004) se disparó porque el BCV envía una cadena TLS incompleta; el descargador valida contra el almacén de confianza del SO vía `truststore` (verificación estricta, sin vía de excepción). Documentado en ADR-0004 §Nota de implementación y threat model.
@@ -46,6 +49,7 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 ### Seguridad
 - Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
 
-[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/jeremialcala/bcv-fx-ingestor/releases/tag/v0.1.0
