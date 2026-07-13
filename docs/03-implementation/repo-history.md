@@ -4,7 +4,7 @@
 * **Fecha:** 2026-07-12
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 03-implementation
-* **Versión:** 0.5.0
+* **Versión:** 1.0.0
 * **Gate:** 2
 * **Rama principal:** main
 * **Estrategia de branching:** trunk-based
@@ -40,12 +40,20 @@ gitGraph
     commit id: "5400c96"
     commit id: "8e38251"
     commit id: "cc9dc5e" tag: "v0.5.0"
+    commit id: "4b2c7f7"
+    commit id: "cbb49ed"
+    commit id: "40b6595"
+    commit id: "be0efd3" tag: "v1.0.0"
 ```
 
 ### Bitácora de cambios (fiel al repo)
 
 | Commit | Tipo | Tags | Autor | Fecha | Mensaje |
 |---|---|---|---|---|---|
+| `be0efd3` | commit | v1.0.0 | Jeremi Alcala | 2026-07-12 | docs: aprobar Gate 5 y cortar versión 1.0.0 — primer release productivo |
+| `40b6595` | commit | — | Jeremi Alcala | 2026-07-12 | feat: fase 06-monitoring hacia el Gate 5 — SLOs monitorizados y proceso de incidentes |
+| `cbb49ed` | commit | — | Jeremi Alcala | 2026-07-12 | chore(ci): actualizar actions a majors con Node 24 |
+| `4b2c7f7` | commit | — | Jeremi Alcala | 2026-07-12 | docs: regenerar historial vivo tras el tag v0.5.0 |
 | `cc9dc5e` | commit | v0.5.0 | Jeremi Alcala | 2026-07-12 | docs: aprobar Gate 4 y cortar versión 0.5.0 |
 | `8e38251` | commit | — | Jeremi Alcala | 2026-07-12 | docs: registrar la corrida verde del smoke como evidencia del Gate 4 |
 | `5400c96` | commit | — | Jeremi Alcala | 2026-07-12 | fix(ci): instalar el intermedio de Sectigo en el runner del smoke |
@@ -78,3 +86,4 @@ gitGraph
 | v0.3.0 | 0.3.0 (Gate 2) | ADR-0002/0003/0004 implementadas | ingestor completo, RF04 refinado (spread entre bases), truststore |
 | v0.4.0 | 0.4.0 (Gate 3) | FX-ING-001 verificada (RF/RNF/RS ↔ tests) | estrategia de pruebas, matriz de transiciones, RF04 recalibrado con el corpus, 78 tests / 99% |
 | v0.5.0 | 0.5.0 (Gate 4) | ADR-0005 · ADR-0006 | CI con gates de seguridad, imagen GHCR, K8s EKS/GKE, Worker R2; intermedio Sectigo vendorizado |
+| v1.0.0 | 1.0.0 (Gate 5) | observability.md (SLOs + incidentes) | primer release productivo: frescura instrumentada, health/smoke/re-scan como alertas — ciclo AI-DLC completo |
