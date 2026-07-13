@@ -7,6 +7,10 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+### Añadido
+
+- Overlay `deploy/k8s/overlays/local` para despliegue local (kind/docker-desktop): mismo CronJob real con publicación a `/data/publicado` en vez de nubes; añadido al gate de IaC del CI y al runbook (§Despliegue local). Verificado end-to-end en el equipo del operador: ingesta real de 2026-TIII dentro del clúster (8 jornadas, 168 tasas, TLS estricto con el intermedio vendorizado), artefacto extraído del PVC y servido por el Worker en miniflare con integridad SHA-256 confirmada.
+
 ## [1.0.0] - 2026-07-12
 
 Primer release productivo: cierra el ciclo AI-DLC completo (gates 0–5 aprobados).

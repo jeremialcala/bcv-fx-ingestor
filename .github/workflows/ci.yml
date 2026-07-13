@@ -154,7 +154,7 @@ jobs:
           sudo mv kubeconform /usr/local/bin/
       - name: validar manifests (base + overlays)
         run: |
-          for objetivo in deploy/k8s/base deploy/k8s/overlays/eks deploy/k8s/overlays/gke; do
+          for objetivo in deploy/k8s/base deploy/k8s/overlays/eks deploy/k8s/overlays/gke deploy/k8s/overlays/local; do
             echo "== $objetivo =="
             kubectl kustomize "$objetivo" | kubeconform -strict -summary -
           done

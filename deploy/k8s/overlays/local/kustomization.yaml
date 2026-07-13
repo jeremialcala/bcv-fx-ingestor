@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Overlay para un clúster local (kind / docker-desktop): mismo CronJob real, pero la
+# "publicación" copia el artefacto a /data/publicado dentro del propio volumen en vez
+# de subirlo a S3/GCS/R2. El Secret rclone-conf se crea vacío (no hay remotes):
+#   kubectl -n bcv-fx create secret generic rclone-conf --from-literal=rclone.conf=""
+resources:
+  - ../../base
+
+patches:
+  - path: pvc-storageclass.yaml
+    target:
+      kind: PersistentVolumeClaim
+      name: datos-ingestor
+  - path: cronjob-publicacion-local.yaml
+    target:
+      kind: CronJob
+      name: ingesta-bcv

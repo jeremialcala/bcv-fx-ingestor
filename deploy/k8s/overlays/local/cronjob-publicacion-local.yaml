@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ingesta-bcv
+  namespace: bcv-fx
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: publicar
+              args:
+                - |
+                  set -e
+                  mkdir -p /data/publicado
+                  rclone copyto /data/bcv_fx.db /data/publicado/bcv_fx.db
+                  echo "publicado localmente en /data/publicado/bcv_fx.db"
+              volumeMounts:
+                - name: datos
+                  mountPath: /data
+                  readOnly: false
+                - name: rclone-conf
+                  mountPath: /config/rclone
+                  readOnly: true

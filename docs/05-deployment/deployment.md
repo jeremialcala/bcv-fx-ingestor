@@ -128,6 +128,25 @@ gantt
 4. Desplegar el Worker: `cd deploy/cloudflare && npx wrangler deploy`.
 5. Primera corrida manual: `kubectl -n bcv-fx create job --from=cronjob/ingesta-bcv ingesta-inicial`.
 
+### Despliegue local (kind / docker-desktop)
+
+Ejecutado y verificado el 2026-07-12 en el equipo del operador: mismo CronJob real, la
+publicación copia el artefacto a `/data/publicado` (sin nubes) y el Worker corre en miniflare.
+
+```bash
+kind create cluster --name bcv-fx
+kubectl -n bcv-fx create secret generic rclone-conf --from-literal=rclone.conf=""   # tras el apply
+kubectl apply -k deploy/k8s/overlays/local
+kubectl -n bcv-fx create job --from=cronjob/ingesta-bcv ingesta-manual   # corrida inmediata
+# edge local: sembrar el R2 simulado y servir
+cd deploy/cloudflare
+npx wrangler r2 object put bcv-fx-artefactos/bcv_fx.db --file <artefacto> --local
+npx wrangler dev --port 8787   # GET http://127.0.0.1:8787/estado y /bcv_fx.db
+```
+
+El CronJob queda programado (días hábiles 21:00 UTC) mientras el clúster kind exista; el
+Worker local es un proceso de desarrollo que se relanza con `wrangler dev`.
+
 ### Actualización de versión
 1. Cortar tag `vX.Y.Z` (== `pyproject.version`); el CI publica la imagen a GHCR.
 2. Actualizar el tag de imagen en `deploy/k8s/base/cronjob.yaml` y `kubectl apply -k` del overlay.
