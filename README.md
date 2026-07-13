@@ -19,7 +19,7 @@ Proyecto estructurado con la metodología **AI-DLC** (seguridad por diseño, gat
 | 03-implementation | Gate 2 | ✅ aprobado 2026-07-12 |
 | 04-testing | Gate 3 | ✅ aprobado 2026-07-12 |
 | 05-deployment | Gate 4 | ✅ aprobado 2026-07-12 |
-| 06-monitoring | Gate 5 | evidencia completa, pendiente aprobación humana |
+| 06-monitoring | Gate 5 | ✅ aprobado 2026-07-12 — ciclo AI-DLC completo (v1.0.0) |
 
 ## Uso
 

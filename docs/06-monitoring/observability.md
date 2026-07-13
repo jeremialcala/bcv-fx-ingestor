@@ -1,6 +1,6 @@
 # Observabilidad — BCV FX Ingestor
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-12
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 06-monitoring

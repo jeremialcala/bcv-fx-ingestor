@@ -7,11 +7,19 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-12
+
+Primer release productivo: cierra el ciclo AI-DLC completo (gates 0–5 aprobados).
+
 ### Añadido
 
 - Fase 06-monitoring (Gate 5): `docs/06-monitoring/observability.md` con 6 SLOs dimensionados al sistema (frescura del artefacto con doble medición edge/origen, drift de la fuente, éxito de ingesta, cuarentenas, pipeline, duración), C4Deployment de telemetría, sequence señal→alerta→operador, stateDiagram del ciclo de incidente con matriz señal→diagnóstico→acción, y timeline de hitos; checklist `gates/gate-5-monitoring.md`.
 - Instrumentación de monitoreo: bloque `frescura` en `bcv-ingest estado` (última fecha de operación, edad en días, última ingesta — SLI primario, con test de integración; 79 tests) y workflow `health.yml` (mar–sáb) que vigila la edad del artefacto publicado vía el `/estado` del Worker, con guard que lo deja listo-pero-inactivo hasta configurar `WORKER_URL`.
 - Badge de salud del artefacto en el README.
+
+### Cambiado
+
+- Gate 5 (monitoring) aprobado el 2026-07-12 (Jeremi Alcalá); `observability.md` pasa a `approved`, el CronJob de K8s apunta a la imagen `v1.0.0` y el proyecto entra en operación. Abierto trasladado: stakeholders operador/analista en el charter (ahora relevante como on-call).
 
 ### Seguridad
 
@@ -115,7 +123,8 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 - Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
 
-[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.5.0...v1.0.0
 [0.5.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.2.0...v0.3.0
