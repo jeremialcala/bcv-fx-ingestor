@@ -8,6 +8,15 @@ spec:
     spec:
       template:
         spec:
+          # mismos valores que la base: el merge es idempotente, pero deja este patch
+          # seguro leído en solitario (trivy escanea también los archivos parciales)
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            fsGroup: 10001
+            seccompProfile:
+              type: RuntimeDefault
           containers:
             - name: publicar
               args:
@@ -16,6 +25,11 @@ spec:
                   mkdir -p /data/publicado
                   rclone copyto /data/bcv_fx.db /data/publicado/bcv_fx.db
                   echo "publicado localmente en /data/publicado/bcv_fx.db"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
               volumeMounts:
                 - name: datos
                   mountPath: /data
