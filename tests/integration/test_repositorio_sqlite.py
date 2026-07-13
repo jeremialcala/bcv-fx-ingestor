@@ -107,6 +107,26 @@ def test_estado_general_filtra_por_jornada(repo):
     assert [c["motivo"] for c in estado["cuarentenas"]] == ["CHF: spread incoherente"]
 
 
+def test_frescura_para_monitoreo(repo):
+    # SLI del Gate 5: base vacía → sin frescura; con datos → última jornada y edad
+    vacio = repo.estado_general()["frescura"]
+    assert vacio == {
+        "ultima_fecha_operacion": None,
+        "dias_desde_ultima_jornada": None,
+        "ultima_ingesta_en": None,
+    }
+
+    ingesta_id = repo.registrar_ingesta(archivo(), EstadoIngesta.VALIDANDO)
+    repo.guardar_jornada(jornada(), ingesta_id)
+    repo.actualizar_estado(ingesta_id, EstadoIngesta.CARGADO_PARCIAL)
+    repo.confirmar()
+
+    frescura = repo.estado_general()["frescura"]
+    assert frescura["ultima_fecha_operacion"] == "2020-03-31"
+    assert frescura["dias_desde_ultima_jornada"] >= 0
+    assert frescura["ultima_ingesta_en"] is not None
+
+
 def test_revertir_descarta_la_transaccion_completa(repo):
     # A1: nunca cargas parciales
     ingesta_id = repo.registrar_ingesta(archivo(), EstadoIngesta.VALIDANDO)

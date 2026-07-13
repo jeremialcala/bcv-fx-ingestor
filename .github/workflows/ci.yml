@@ -10,6 +10,8 @@ on:
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1" # re-scan semanal: las CVEs aparecen sin cambios de código (A09)
 
 permissions:
   contents: read

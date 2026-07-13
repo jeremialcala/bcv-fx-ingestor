@@ -201,7 +201,24 @@ class RepositorioSqlite(RepositorioTasasPort):
         self._conn.rollback()
 
     def estado_general(self, fecha_operacion: date | None = None) -> dict:
+        # frescura: SLI primario del monitoreo (Gate 5) — edad de la serie y de la última corrida
+        ultima_jornada = self._conn.execute(
+            "SELECT MAX(fecha_operacion) AS fecha FROM jornada"
+        ).fetchone()["fecha"]
+        ultima_ingesta = self._conn.execute(
+            "SELECT MAX(procesado_en) AS en FROM ingesta WHERE estado IN (?, ?)",
+            _ESTADOS_INGERIDOS,
+        ).fetchone()["en"]
         estado = {
+            "frescura": {
+                "ultima_fecha_operacion": ultima_jornada,
+                "dias_desde_ultima_jornada": (
+                    (date.today() - date.fromisoformat(ultima_jornada)).days
+                    if ultima_jornada
+                    else None
+                ),
+                "ultima_ingesta_en": ultima_ingesta,
+            },
             "ingestas": [
                 dict(fila)
                 for fila in self._conn.execute(

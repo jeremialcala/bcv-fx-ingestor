@@ -1,0 +1,37 @@
+# Salud del artefacto publicado (SLO de frescura, Gate 5): consulta /estado del Worker y
+# falla —con email de GitHub al operador— si el Worker no responde o el artefacto tiene
+# más de 4 días naturales (margen de fin de semana + festivo sobre la corrida de días
+# hábiles). Corre mar–sáb para validar la corrida del día hábil anterior.
+#
+# Activación: requiere la repo variable WORKER_URL (Settings → Variables) apuntando al
+# Worker desplegado (runbook en docs/05-deployment/deployment.md). Sin ella, sale en
+# verde con un aviso: el monitoreo queda listo y se enciende con el despliegue real.
+name: Salud del artefacto
+
+on:
+  schedule:
+    - cron: "0 12 * * 2-6" # mar-sáb 12:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frescura:
+    runs-on: ubuntu-latest
+    steps:
+      - name: consultar /estado del Worker
+        env:
+          WORKER_URL: ${{ vars.WORKER_URL }}
+          EDAD_MAXIMA_DIAS: "4"
+        run: |
+          if [ -z "$WORKER_URL" ]; then
+            echo "::notice::WORKER_URL no está configurada como repo variable; el chequeo de frescura queda inactivo hasta desplegar el Worker (ver runbook de deployment.md)."
+            exit 0
+          fi
+          if ! curl -sf --max-time 30 "$WORKER_URL/estado" -o estado.json; then
+            echo "::error::el Worker no responde o el artefacto no está publicado ($WORKER_URL/estado)"
+            exit 1
+          fi
+          cat estado.json
+          python -c "import json, datetime, os; e = json.load(open('estado.json')); s = datetime.datetime.fromisoformat(e['subido'].replace('Z', '+00:00')); edad = (datetime.datetime.now(datetime.timezone.utc) - s).days; limite = int(os.environ['EDAD_MAXIMA_DIAS']); print(f'edad del artefacto: {edad} días (límite {limite})'); assert edad <= limite, f'SLO de frescura violado: {edad} días'"

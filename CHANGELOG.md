@@ -7,6 +7,16 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+### Añadido
+
+- Fase 06-monitoring (Gate 5): `docs/06-monitoring/observability.md` con 6 SLOs dimensionados al sistema (frescura del artefacto con doble medición edge/origen, drift de la fuente, éxito de ingesta, cuarentenas, pipeline, duración), C4Deployment de telemetría, sequence señal→alerta→operador, stateDiagram del ciclo de incidente con matriz señal→diagnóstico→acción, y timeline de hitos; checklist `gates/gate-5-monitoring.md`.
+- Instrumentación de monitoreo: bloque `frescura` en `bcv-ingest estado` (última fecha de operación, edad en días, última ingesta — SLI primario, con test de integración; 79 tests) y workflow `health.yml` (mar–sáb) que vigila la edad del artefacto publicado vía el `/estado` del Worker, con guard que lo deja listo-pero-inactivo hasta configurar `WORKER_URL`.
+- Badge de salud del artefacto en el README.
+
+### Seguridad
+
+- Re-scan semanal programado en `ci.yml` (lunes): SAST, SCA y escaneo de imagen re-corren aunque no haya cambios de código — las CVEs nuevas no esperan commits (A09).
+
 ## [0.5.0] - 2026-07-12
 
 ### Añadido

@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/jeremialcala/bcv-fx-ingestor/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jeremialcala/bcv-fx-ingestor/actions/workflows/ci.yml)
 [![Smoke ingesta real](https://github.com/jeremialcala/bcv-fx-ingestor/actions/workflows/smoke.yml/badge.svg)](https://github.com/jeremialcala/bcv-fx-ingestor/actions/workflows/smoke.yml)
+[![Salud del artefacto](https://github.com/jeremialcala/bcv-fx-ingestor/actions/workflows/health.yml/badge.svg)](https://github.com/jeremialcala/bcv-fx-ingestor/actions/workflows/health.yml)
 [![Última versión](https://img.shields.io/github/v/tag/jeremialcala/bcv-fx-ingestor?label=versi%C3%B3n&sort=semver)](https://github.com/jeremialcala/bcv-fx-ingestor/tags)
 
 Proceso de ingesta y carga de los tipos de cambio de referencia históricos del Banco Central de Venezuela (BCV) hacia SQLite, con CLI en Python.
@@ -18,6 +19,7 @@ Proyecto estructurado con la metodología **AI-DLC** (seguridad por diseño, gat
 | 03-implementation | Gate 2 | ✅ aprobado 2026-07-12 |
 | 04-testing | Gate 3 | ✅ aprobado 2026-07-12 |
 | 05-deployment | Gate 4 | ✅ aprobado 2026-07-12 |
+| 06-monitoring | Gate 5 | evidencia completa, pendiente aprobación humana |
 
 ## Uso
 
@@ -76,8 +78,10 @@ bcv-fx-ingestor/
 │   │   └── repo-history.md                 # Gate 2 (documentación viva: gitGraph + bitácora)
 │   ├── 04-testing/
 │   │   └── test-strategy.md                # Gate 3 (pirámide, transiciones, requisito↔test)
-│   └── 05-deployment/
-│       └── deployment.md                   # Gate 4 (C4Deployment, pipeline, runbook)
+│   ├── 05-deployment/
+│   │   └── deployment.md                   # Gate 4 (C4Deployment, pipeline, runbook)
+│   └── 06-monitoring/
+│       └── observability.md                # Gate 5 (SLOs, incidentes, telemetría)
 ├── src/bcv_ingest/
 │   ├── dominio/                            # entidades, validador, puertos (Python puro)
 │   ├── aplicacion/                         # casos de uso
@@ -90,7 +94,7 @@ bcv-fx-ingestor/
 │   ├── docker/ca-extra/                    # intermedio Sectigo (cadena incompleta del BCV)
 │   ├── k8s/                                # base + overlays eks/gke (kustomize)
 │   └── cloudflare/                         # Worker + wrangler.toml (distribución edge)
-├── .github/workflows/                      # ci.yml (gates de seguridad) + smoke.yml
+├── .github/workflows/                      # ci.yml (gates + re-scan) · smoke.yml · health.yml
 ├── Dockerfile
 ├── scripts/                                # validate_mermaid.py · gitgraph_from_log.py
 └── gates/
@@ -98,7 +102,8 @@ bcv-fx-ingestor/
     ├── gate-1-design.md
     ├── gate-2-implementation.md
     ├── gate-3-testing.md
-    └── gate-4-deployment.md
+    ├── gate-4-deployment.md
+    └── gate-5-monitoring.md
 ```
 
 ## Modelo de datos fuente
