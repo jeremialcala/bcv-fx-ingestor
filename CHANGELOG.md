@@ -10,6 +10,15 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 ### Añadido
 
 - Overlay `deploy/k8s/overlays/local` para despliegue local (kind/docker-desktop): mismo CronJob real con publicación a `/data/publicado` en vez de nubes; añadido al gate de IaC del CI y al runbook (§Despliegue local). Verificado end-to-end en el equipo del operador: ingesta real de 2026-TIII dentro del clúster (8 jornadas, 168 tasas, TLS estricto con el intermedio vendorizado), artefacto extraído del PVC y servido por el Worker en miniflare con integridad SHA-256 confirmada.
+- Fase 01-requirements del feature FX-ING-002 (rumbo al Gate 0): PRD `docs/01-requirements/consulta-descarga-fx.md` — API JSON de consulta y Web UI de consulta/descarga sobre el Worker de Cloudflare existente, protegidas por clave API (RF09–RF17, RNF04–RNF07, escenarios de abuso A1–A6, DFD + quadrant DREAD T1–T7); checklist `gates/gate-0-requirements-fx-ing-002.md` (draft, aprobación humana pendiente).
+
+### Cambiado
+
+- Levantado parcialmente el no-scope de API de consulta y UI (decisión 2026-07-14): charter §Alcance, mindmap y riesgos (0.2.0 → 0.3.0) y PRD FX-ING-001 §Objetivos (0.3.0 → 0.4.0) anotados sin reescribir historia; la consulta REST/JSON y la Web UI pasan al alcance vía FX-ING-002. GraphQL, dashboards analíticos, escritura de datos y tasas derivadas siguen fuera. Glosario con el contexto acotado Consulta Cambiaria (Clave API, Consulta puntual, Serie; 0.2.0 → 0.3.0). ADR-0007 (mecanismo de consulta en el edge, supersede parcialmente ADR-0006) queda pendiente para el Gate 1.
+
+### Seguridad
+
+- Definidos RS06–RS11 (ASVS L1) para la nueva superficie de consulta: default-deny con clave API, secreto en Wrangler, validación allowlist de parámetros, anti-automatización (rate limiting y topes de página), control de caché/headers y auditoría de uso por clave. La clave API queda clasificada como secreto operativo Confidencial en `data-classification.md` (0.2.0 → 0.3.0).
 
 ## [1.0.0] - 2026-07-12
 
