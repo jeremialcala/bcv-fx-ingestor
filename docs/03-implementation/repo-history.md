@@ -1,13 +1,13 @@
 # Historial de implementación — BCV FX Ingestor
 
 * **Estado:** approved
-* **Fecha:** 2026-07-12
+* **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 03-implementation
-* **Versión:** 1.0.0
+* **Versión:** 1.1.0
 * **Gate:** 2
 * **Rama principal:** main
-* **Estrategia de branching:** trunk-based
+* **Estrategia de branching:** gitflow (develop/feature/release; trunk-based hasta v1.0.0)
 
 ## Historial del repositorio (documentación viva)
 
@@ -44,12 +44,32 @@ gitGraph
     commit id: "cbb49ed"
     commit id: "40b6595"
     commit id: "be0efd3" tag: "v1.0.0"
+    commit id: "5e31f39"
+    commit id: "684afd8"
+    commit id: "b54ac5b"
+    commit id: "5238f3f"
+    branch feature-0
+    checkout feature-0
+    commit id: "1482c54"
+    commit id: "2c954ca"
+    commit id: "2fde888"
+    checkout main
+    merge feature-0 tag: "v1.1.0"
 ```
 
 ### Bitácora de cambios (fiel al repo)
 
 | Commit | Tipo | Tags | Autor | Fecha | Mensaje |
 |---|---|---|---|---|---|
+| `b7497c0` | merge | — | Jeremi Alcala | 2026-07-14 | Merge release/1.1.0 en develop — cierre de la release 1.1.0 |
+| `d75331c` | merge | v1.1.0 | Jeremi Alcala | 2026-07-14 | Merge release/1.1.0 en main — versión 1.1.0 (Gate 0 de FX-ING-002) |
+| `2fde888` | commit | — | Jeremi Alcala | 2026-07-14 | chore(release): cortar versión 1.1.0 — Gate 0 de FX-ING-002 |
+| `2c954ca` | merge | — | Jeremi Alcala | 2026-07-14 | Merge feature/fx-ing-002-requisitos en develop — Gate 0 del feature FX-ING-002 |
+| `1482c54` | commit | — | Jeremi Alcala | 2026-07-14 | feat(fx-ing-002): requisitos de consulta y descarga vía Web UI y API — Gate 0 aprobado |
+| `5238f3f` | commit | — | Jeremi Alcala | 2026-07-12 | fix(deploy): securityContext explícito en el patch local para el escaneo IaC |
+| `b54ac5b` | commit | — | Jeremi Alcala | 2026-07-12 | chore: excluir el estado local de wrangler (.wrangler/) del repositorio |
+| `684afd8` | commit | — | Jeremi Alcala | 2026-07-12 | feat(deploy): overlay local (kind/docker-desktop) verificado end-to-end |
+| `5e31f39` | commit | — | Jeremi Alcala | 2026-07-12 | docs: regenerar historial vivo tras el tag v1.0.0 — ciclo AI-DLC completo |
 | `be0efd3` | commit | v1.0.0 | Jeremi Alcala | 2026-07-12 | docs: aprobar Gate 5 y cortar versión 1.0.0 — primer release productivo |
 | `40b6595` | commit | — | Jeremi Alcala | 2026-07-12 | feat: fase 06-monitoring hacia el Gate 5 — SLOs monitorizados y proceso de incidentes |
 | `cbb49ed` | commit | — | Jeremi Alcala | 2026-07-12 | chore(ci): actualizar actions a majors con Node 24 |
@@ -87,3 +107,4 @@ gitGraph
 | v0.4.0 | 0.4.0 (Gate 3) | FX-ING-001 verificada (RF/RNF/RS ↔ tests) | estrategia de pruebas, matriz de transiciones, RF04 recalibrado con el corpus, 78 tests / 99% |
 | v0.5.0 | 0.5.0 (Gate 4) | ADR-0005 · ADR-0006 | CI con gates de seguridad, imagen GHCR, K8s EKS/GKE, Worker R2; intermedio Sectigo vendorizado |
 | v1.0.0 | 1.0.0 (Gate 5) | observability.md (SLOs + incidentes) | primer release productivo: frescura instrumentada, health/smoke/re-scan como alertas — ciclo AI-DLC completo |
+| v1.1.0 | 1.1.0 (Gate 0 de FX-ING-002) | FX-ING-002 (PRD consulta-descarga) · ADR-0007 pendiente | requisitos de consulta y descarga vía Web UI y API con clave API; no-scope levantado; overlay k8s local; adopción de gitflow |
