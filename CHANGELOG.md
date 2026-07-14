@@ -7,6 +7,8 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-14
+
 ### Añadido
 
 - Overlay `deploy/k8s/overlays/local` para despliegue local (kind/docker-desktop): mismo CronJob real con publicación a `/data/publicado` en vez de nubes; añadido al gate de IaC del CI y al runbook (§Despliegue local). Verificado end-to-end en el equipo del operador: ingesta real de 2026-TIII dentro del clúster (8 jornadas, 168 tasas, TLS estricto con el intermedio vendorizado), artefacto extraído del PVC y servido por el Worker en miniflare con integridad SHA-256 confirmada.
@@ -14,6 +16,7 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ### Cambiado
 
+- Gate 0 del feature FX-ING-002 aprobado el 2026-07-14 (Jeremi Alcalá); el PRD `consulta-descarga-fx.md` pasa a `approved` y este corte publica la imagen `v1.1.0` (el CronJob de K8s la referencia). El repositorio adopta **gitflow** (develop/feature/release) para el trabajo del feature, en reemplazo del trunk-based del ciclo 0.x–1.0.
 - Levantado parcialmente el no-scope de API de consulta y UI (decisión 2026-07-14): charter §Alcance, mindmap y riesgos (0.2.0 → 0.3.0) y PRD FX-ING-001 §Objetivos (0.3.0 → 0.4.0) anotados sin reescribir historia; la consulta REST/JSON y la Web UI pasan al alcance vía FX-ING-002. GraphQL, dashboards analíticos, escritura de datos y tasas derivadas siguen fuera. Glosario con el contexto acotado Consulta Cambiaria (Clave API, Consulta puntual, Serie; 0.2.0 → 0.3.0). ADR-0007 (mecanismo de consulta en el edge, supersede parcialmente ADR-0006) queda pendiente para el Gate 1.
 
 ### Seguridad
@@ -136,7 +139,8 @@ Primer release productivo: cierra el ciclo AI-DLC completo (gates 0–5 aprobado
 
 - Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
 
-[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.5.0...v1.0.0
 [0.5.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.3.0...v0.4.0
