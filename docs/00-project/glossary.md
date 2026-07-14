@@ -1,11 +1,11 @@
 # Glosario / Lenguaje Ubicuo (DDD)
 
 * **Estado:** approved
-* **Fecha:** 2026-07-11
+* **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 00-project
-* **Versión:** 0.2.0
-* **Contextos acotados:** Ingesta Cambiaria
+* **Versión:** 0.3.0
+* **Contextos acotados:** Ingesta Cambiaria, Consulta Cambiaria
 
 | Término | Definición | Contexto acotado (Bounded Context) |
 |---|---|---|
@@ -22,3 +22,6 @@
 | Idempotencia | Propiedad de la carga: re-ingerir el mismo archivo o jornada no crea duplicados ni altera datos ya cargados | Ingesta Cambiaria |
 | Redenominación | Cambio de escala del bolívar (Bs.F→Bs.S 2018 ÷100.000; Bs.S→Bs.D 2021 ÷1.000.000) que afecta la comparabilidad histórica | Ingesta Cambiaria |
 | Mesa de Cambio | Mecanismo de los operadores cambiarios donde se transan las operaciones que originan la tasa | Ingesta Cambiaria |
+| Clave API | Credencial secreta que autentica el acceso al servicio de consulta y descarga; la entrega y rota manualmente el operador (FX-ING-002) | Consulta Cambiaria |
+| Consulta puntual | Petición de las tasas de una jornada (fecha de operación) para una moneda o todas | Consulta Cambiaria |
+| Serie | Tasas de una moneda a lo largo de un rango de fechas de operación, en orden cronológico | Consulta Cambiaria |

@@ -20,6 +20,7 @@ Proyecto estructurado con la metodología **AI-DLC** (seguridad por diseño, gat
 | 04-testing | Gate 3 | ✅ aprobado 2026-07-12 |
 | 05-deployment | Gate 4 | ✅ aprobado 2026-07-12 |
 | 06-monitoring | Gate 5 | ✅ aprobado 2026-07-12 — ciclo AI-DLC completo (v1.0.0) |
+| 01-requirements (FX-ING-002) | Gate 0 | ✅ aprobado 2026-07-14 — consulta y descarga vía Web UI y API (v1.1.0) |
 
 ## Uso
 
@@ -51,7 +52,8 @@ Multinube edge-first (detalle y runbook en `docs/05-deployment/deployment.md`, A
 - **K8s (AWS o GCP)**: `kubectl apply -k deploy/k8s/overlays/eks` (o `gke`) — CronJob de
   días hábiles que ingiere el trimestre en curso y publica `bcv_fx.db` a S3/GCS/R2 con rclone.
 - **Edge (Cloudflare)**: `cd deploy/cloudflare && npx wrangler deploy` — Worker que sirve
-  el artefacto desde R2 (`GET /bcv_fx.db`, `GET /estado`). Sin API de consulta (no-scope).
+  el artefacto desde R2 (`GET /bcv_fx.db`, `GET /estado`). La API de consulta y la Web UI
+  están en requisitos (FX-ING-002, Gate 0 aprobado); implementación rumbo al Gate 1.
 
 ## Estructura
 
@@ -70,7 +72,8 @@ bcv-fx-ingestor/
 │   │       ├── 0003-parser-xlrd-con-validacion-de-dominio.md
 │   │       └── 0004-tls-estricto-sin-excepciones.md
 │   ├── 01-requirements/
-│   │   └── ingesta-historicos-fx.md        # PRD (Gate 0)
+│   │   ├── ingesta-historicos-fx.md        # PRD FX-ING-001 (Gate 0)
+│   │   └── consulta-descarga-fx.md         # PRD FX-ING-002 (Gate 0)
 │   ├── 02-design/
 │   │   ├── architecture.md                 # Gate 1
 │   │   └── threat-model.md                 # Gate 1
@@ -99,6 +102,7 @@ bcv-fx-ingestor/
 ├── scripts/                                # validate_mermaid.py · gitgraph_from_log.py
 └── gates/
     ├── gate-0-requirements.md
+    ├── gate-0-requirements-fx-ing-002.md
     ├── gate-1-design.md
     ├── gate-2-implementation.md
     ├── gate-3-testing.md

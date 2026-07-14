@@ -1,10 +1,10 @@
 # Clasificación de Datos
 
 * **Estado:** approved
-* **Fecha:** 2026-07-11
+* **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 00-project
-* **Versión:** 0.2.0
+* **Versión:** 0.3.0
 * **Owner de datos (DPO):** Jeremi Alcalá
 * **Regulación aplicable:** Ninguna (datos públicos oficiales; sin PII)
 
@@ -15,6 +15,7 @@
 | Hash SHA-256 y metadatos de ingesta | Interno | — | No requerido | N/A (local) | Indefinida (auditoría) |
 | Logs de ejecución y motivos de cuarentena | Interno | — | No requerido | N/A (local) | ≥ 1 año |
 | Metadatos de autoría embebidos en los XLS (nombres de funcionarios BCV) | Interno | — | No requerido | N/A | No extraer ni almacenar |
+| Clave API del servicio de consulta (FX-ING-002) | Confidencial | — | Secret de Wrangler (Cloudflare) | HTTPS, solo en header | Hasta rotación/revocación; nunca en repo, código de la UI ni logs |
 
 Niveles: Público < Interno < Confidencial < Restringido.
 
