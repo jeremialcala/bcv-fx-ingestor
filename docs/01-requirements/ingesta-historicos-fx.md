@@ -1,10 +1,10 @@
 # PRD — Ingesta de tipos de cambio históricos del BCV
 
 * **Estado:** approved
-* **Fecha:** 2026-07-12
+* **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 01-requirements
-* **Versión:** 0.3.0
+* **Versión:** 0.4.0
 * **Gate:** 0
 * **Feature/Épica ID:** FX-ING-001
 * **Nivel ASVS objetivo:** L1
@@ -17,7 +17,7 @@ El modelo de referencia (`2_1_2a20_smc.xls`) confirma el layout: hojas `DDMMYYYY
 
 ## Objetivos / No-objetivos
 
-Objetivos: consolidar la serie histórica en SQLite; garantizar idempotencia; detectar y aislar anomalías de la fuente; trazar cada tasa hasta su archivo de origen. No-objetivos: exponer API de consulta; corregir datos de la fuente; tasas no oficiales; UI.
+Objetivos: consolidar la serie histórica en SQLite; garantizar idempotencia; detectar y aislar anomalías de la fuente; trazar cada tasa hasta su archivo de origen. No-objetivos: exponer API de consulta; corregir datos de la fuente; tasas no oficiales; UI. *(Actualización 2026-07-14: los no-objetivos «exponer API de consulta» y «UI» se levantan y pasan al alcance del feature FX-ING-002 — `consulta-descarga-fx.md`; siguen fuera del alcance de este feature FX-ING-001. «Corregir datos de la fuente» y «tasas no oficiales» permanecen como no-objetivos del proyecto.)*
 
 ## Contexto del sistema (C4 Context)
 
