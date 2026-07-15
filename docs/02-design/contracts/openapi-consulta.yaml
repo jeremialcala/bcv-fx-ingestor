@@ -1,0 +1,175 @@
+# Esqueleto de contrato — API de consulta FX (FX-ING-002, Gate 1)
+# Estado: review · Fecha: 2026-07-14 · Decisores: Jeremi Alcalá · Fase: 02-design · Versión: 0.1.0
+# /estado y /bcv_fx.db conservan su contrato actual (RF16) y quedan fuera de este documento.
+openapi: 3.1.0
+info:
+  title: BCV FX — API de consulta
+  description: >
+    Consulta de solo lectura sobre la publicación derivada del artefacto bcv_fx.db
+    (JSON precalculado en R2, ADR-0007). Autenticación por clave API en header
+    (RF15/RS06); rate limiting en la plataforma (ADR-0008). Toda respuesta incluye
+    metadatos de procedencia y frescura coherentes con /estado (RF17).
+  version: 0.1.0
+servers:
+  - url: https://bcv-fx-artefacto.example.workers.dev
+    description: Worker de Cloudflare (URL definitiva al desplegar)
+security:
+  - ClaveApi: []
+paths:
+  /api/tasas:
+    get:
+      summary: Consulta puntual por fecha o serie por rango (RF09, RF10, RF13)
+      description: >
+        Con `fecha` devuelve la jornada exacta (todas las monedas o la indicada).
+        Con `desde`+`hasta` (+`moneda` obligatoria) devuelve la serie paginada en
+        orden cronológico. `descarga=true` añade content-disposition attachment
+        con el mismo shape (RF13). `fecha` y `desde`/`hasta` son excluyentes.
+      parameters:
+        - name: fecha
+          in: query
+          schema: { type: string, format: date }
+        - name: desde
+          in: query
+          schema: { type: string, format: date }
+        - name: hasta
+          in: query
+          schema: { type: string, format: date }
+        - name: moneda
+          in: query
+          description: Código del catálogo (allowlist, RS08)
+          schema: { type: string, pattern: "^[A-Z]{3}$" }
+        - name: pagina
+          in: query
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: limite
+          in: query
+          description: Tope duro 1000 filas (RNF07, ADR-0008)
+          schema: { type: integer, minimum: 1, maximum: 1000, default: 1000 }
+        - name: descarga
+          in: query
+          schema: { type: boolean, default: false }
+      responses:
+        "200":
+          description: Tasas encontradas
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RespuestaTasas" }
+        "400": { $ref: "#/components/responses/ParametrosInvalidos" }
+        "401": { $ref: "#/components/responses/NoAutenticado" }
+        "404": { $ref: "#/components/responses/SinJornada" }
+        "429": { $ref: "#/components/responses/LimiteExcedido" }
+  /api/jornadas/ultima:
+    get:
+      summary: Última jornada disponible con sus tasas (RF11)
+      responses:
+        "200":
+          description: Última jornada publicada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RespuestaTasas" }
+        "401": { $ref: "#/components/responses/NoAutenticado" }
+        "404": { $ref: "#/components/responses/SinJornada" }
+        "429": { $ref: "#/components/responses/LimiteExcedido" }
+  /api/monedas:
+    get:
+      summary: Catálogo de monedas (RF12)
+      responses:
+        "200":
+          description: Catálogo de la publicación
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [monedas, publicacion]
+                properties:
+                  monedas:
+                    type: array
+                    items: { $ref: "#/components/schemas/Moneda" }
+                  publicacion: { $ref: "#/components/schemas/Publicacion" }
+        "401": { $ref: "#/components/responses/NoAutenticado" }
+        "429": { $ref: "#/components/responses/LimiteExcedido" }
+components:
+  securitySchemes:
+    ClaveApi:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: Nunca en la URL (RS07); default-deny en todo /api/* (RS06)
+  schemas:
+    Publicacion:
+      type: object
+      description: Metadatos de procedencia y frescura (RF17, coherentes con /estado)
+      required: [sha256, generado_en]
+      properties:
+        sha256: { type: string, description: SHA-256 del bcv_fx.db de la misma corrida }
+        generado_en: { type: string, format: date-time }
+    Moneda:
+      type: object
+      required: [codigo, pais]
+      properties:
+        codigo: { type: string }
+        pais: { type: string }
+        es_iso4217: { type: boolean }
+        cotizacion_invertida: { type: boolean, description: EUR y GBP }
+    Tasa:
+      type: object
+      required: [moneda, usd_bid, usd_ask, bs_bid, bs_ask]
+      properties:
+        moneda: { type: string }
+        usd_bid: { type: number }
+        usd_ask: { type: number }
+        bs_bid: { type: number }
+        bs_ask: { type: number }
+        cotizacion_invertida: { type: boolean }
+    Jornada:
+      type: object
+      required: [fecha_operacion, fecha_valor, escala_monetaria, tasas]
+      properties:
+        fecha_operacion: { type: string, format: date }
+        fecha_valor: { type: string, format: date }
+        publicado_en: { type: string }
+        escala_monetaria: { type: integer }
+        tasas:
+          type: array
+          items: { $ref: "#/components/schemas/Tasa" }
+    RespuestaTasas:
+      type: object
+      required: [jornadas, publicacion]
+      properties:
+        jornadas:
+          type: array
+          items: { $ref: "#/components/schemas/Jornada" }
+        paginacion:
+          type: object
+          properties:
+            pagina: { type: integer }
+            limite: { type: integer }
+            total_filas: { type: integer }
+        publicacion: { $ref: "#/components/schemas/Publicacion" }
+    Error:
+      type: object
+      description: Shape uniforme sin detalles internos (T13/RS10)
+      required: [error]
+      properties:
+        error: { type: string }
+  responses:
+    ParametrosInvalidos:
+      description: Parámetros fuera del contrato (RS08)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    NoAutenticado:
+      description: Clave ausente o inválida (RS06; rechazo auditado RS11)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    SinJornada:
+      description: Fecha sin jornada publicada (fin de semana/feriado) — 404 controlado (E5)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+    LimiteExcedido:
+      description: Rate limiting de plataforma o tope del Worker (RS09, ADR-0008)
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
