@@ -1,15 +1,15 @@
 # Threat Model — BCV FX Ingestor
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
-* **Versión:** 0.4.0
+* **Versión:** 0.5.0
 * **Gate:** 1
 * **Alcance:** sistema completo (CLI, núcleo, descarga, SQLite) + superficie de consulta en el edge (FX-ING-002)
 * **Metodología:** STRIDE + DREAD
 
-> *(Actualización 2026-07-14, FX-ING-002: se añade la superficie de consulta del edge — §DFD del edge, filas STRIDE nuevas y amenazas T9–T15. Las T1–T8 de la ingesta permanecen como fueron aprobadas; el doc vuelve a `review` hasta el Gate 1 del feature. Las T1–T7 locales del PRD `consulta-descarga-fx.md` corresponden aquí a T9–T15.)*
+> *(Actualización 2026-07-14, FX-ING-002: se añade la superficie de consulta del edge — §DFD del edge, filas STRIDE nuevas y amenazas T9–T15. Las T1–T8 de la ingesta permanecen como fueron aprobadas. Gate 1 del feature aprobado el 2026-07-14; el doc vuelve a `approved`. Las T1–T7 locales del PRD `consulta-descarga-fx.md` corresponden aquí a T9–T15.)*
 * **Clasificación de datos (ref):** `docs/00-project/data-classification.md`
 
 Activo principal a proteger: la **integridad** de la serie histórica (datos públicos: la confidencialidad es secundaria).

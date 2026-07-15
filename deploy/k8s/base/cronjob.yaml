@@ -37,7 +37,7 @@ spec:
             #    serie (RF06) y el operador revisa con `bcv-ingest estado`. Exit >= 3
             #    (red/TLS) corta el Job y NO se publica nada (fail-closed, ADR-0004).
             - name: ingesta
-              image: ghcr.io/jeremialcala/bcv-fx-ingestor:v1.1.0
+              image: ghcr.io/jeremialcala/bcv-fx-ingestor:v1.2.0
               command: ["/bin/sh", "-c"]
               args:
                 - |

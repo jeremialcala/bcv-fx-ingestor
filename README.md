@@ -21,6 +21,7 @@ Proyecto estructurado con la metodología **AI-DLC** (seguridad por diseño, gat
 | 05-deployment | Gate 4 | ✅ aprobado 2026-07-12 |
 | 06-monitoring | Gate 5 | ✅ aprobado 2026-07-12 — ciclo AI-DLC completo (v1.0.0) |
 | 01-requirements (FX-ING-002) | Gate 0 | ✅ aprobado 2026-07-14 — consulta y descarga vía Web UI y API (v1.1.0) |
+| 02-design (FX-ING-002) | Gate 1 | ✅ aprobado 2026-07-14 — JSON precalculado en el edge, ADR-0007/0008 (v1.2.0) |
 
 ## Uso
 

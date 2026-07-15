@@ -7,13 +7,19 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-14
+
 ### Añadido
 
-- Fase 02-design del feature FX-ING-002 (rumbo al Gate 1): ADR-0007 (consulta en el edge vía JSON precalculado publicado junto al artefacto — supersede parcialmente ADR-0006) y ADR-0008 (rate limiting en la plataforma Cloudflare con topes de respuesta en el Worker); `architecture.md` §Distribución y consulta (bounded context Consulta Cambiaria, C4Container del edge, sequence del flujo de consulta, contrato de publicación `publicacion/` y comando propuesto `bcv-ingest exportar`); esqueleto de contrato `docs/02-design/contracts/openapi-consulta.yaml`; checklist `gates/gate-1-design-fx-ing-002.md` (draft, aprobación humana pendiente).
+- Fase 02-design del feature FX-ING-002 (rumbo al Gate 1): ADR-0007 (consulta en el edge vía JSON precalculado publicado junto al artefacto — supersede parcialmente ADR-0006) y ADR-0008 (rate limiting en la plataforma Cloudflare con topes de respuesta en el Worker); `architecture.md` §Distribución y consulta (bounded context Consulta Cambiaria, C4Container del edge, sequence del flujo de consulta, contrato de publicación `publicacion/` y comando propuesto `bcv-ingest exportar`); esqueleto de contrato `docs/02-design/contracts/openapi-consulta.yaml`; checklist `gates/gate-1-design-fx-ing-002.md`.
+
+### Cambiado
+
+- Gate 1 del feature FX-ING-002 aprobado el 2026-07-14 (Jeremi Alcalá): `architecture.md` (0.4.0), `threat-model.md` (0.5.0) y el contrato OpenAPI (0.2.0) pasan a `approved`; decisiones HITL registradas en ADR-0007 (mecanismo de consulta) y ADR-0008 (rate limiting). Abiertos trasladados a 03-implementation: umbral del rate limiting en el runbook y harness vitest/miniflare del Worker.
 
 ### Seguridad
 
-- Threat model extendido a la superficie de consulta del edge: DFD con el trust boundary de Cloudflare, STRIDE de los componentes nuevos (Guard, API, Cache, Publicación R2, Web UI) y amenazas T9–T15 priorizadas con DREAD — todas las ≥ 6.0 con control trazable a RS06–RS11 y ADR-0007/0008. `architecture.md` y `threat-model.md` pasan a `review` hasta el Gate 1 del feature.
+- Threat model extendido a la superficie de consulta del edge: DFD con el trust boundary de Cloudflare, STRIDE de los componentes nuevos (Guard, API, Cache, Publicación R2, Web UI) y amenazas T9–T15 priorizadas con DREAD — todas las ≥ 6.0 con control trazable a RS06–RS11 y ADR-0007/0008.
 
 ## [1.1.0] - 2026-07-14
 
@@ -147,7 +153,8 @@ Primer release productivo: cierra el ciclo AI-DLC completo (gates 0–5 aprobado
 
 - Anomalía real detectada en el modelo fuente (CHF 31/03/2020: BID 0.96273 vs ASK 9.96296) documentada como evidencia del requisito de validación BID≤ASK.
 
-[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.5.0...v1.0.0
 [0.5.0]: https://github.com/jeremialcala/bcv-fx-ingestor/compare/v0.4.0...v0.5.0
