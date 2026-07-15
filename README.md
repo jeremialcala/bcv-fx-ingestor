@@ -112,6 +112,7 @@ bcv-fx-ingestor/
     ├── gate-1-design.md
     ├── gate-1-design-fx-ing-002.md
     ├── gate-2-implementation.md
+    ├── gate-2-implementation-fx-ing-002.md
     ├── gate-3-testing.md
     ├── gate-4-deployment.md
     └── gate-5-monitoring.md

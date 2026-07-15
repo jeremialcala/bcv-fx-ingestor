@@ -36,6 +36,8 @@ spec:
             #    operativo: 2 = hubo cuarentenas, que el pipeline aísla sin contaminar la
             #    serie (RF06) y el operador revisa con `bcv-ingest estado`. Exit >= 3
             #    (red/TLS) corta el Job y NO se publica nada (fail-closed, ADR-0004).
+            #    Tras la ingesta se exporta la publicación JSON derivada (ADR-0007);
+            #    si el export falla, el Job corta y no se publica nada.
             - name: ingesta
               image: ghcr.io/jeremialcala/bcv-fx-ingestor:v1.2.0
               command: ["/bin/sh", "-c"]
@@ -48,6 +50,9 @@ spec:
                   if [ "$rc" -eq 2 ]; then
                     echo "cuarentenas presentes: revisar con 'bcv-ingest estado'" >&2
                     rc=0
+                  fi
+                  if [ "$rc" -eq 0 ]; then
+                    bcv-ingest --db /data/bcv_fx.db exportar --destino /data || rc=$?
                   fi
                   exit "$rc"
               securityContext:
@@ -66,17 +71,27 @@ spec:
                 - name: datos
                   mountPath: /data
           containers:
-            # 2) Publicación del artefacto a las tres nubes con una sola herramienta.
+            # 2) Publicación del artefacto y la publicación JSON a las tres nubes.
             #    Los remotes s3/gcs/r2 se definen en el Secret rclone-conf
             #    (ver secret-rclone.example.yaml). Solo corre si la ingesta terminó bien.
+            #    Orden .db -> publicacion/: el indice.json publicado nunca referencia
+            #    un sha256 cuyo artefacto no esté ya servible. `sync` mantiene el
+            #    prefijo como espejo exacto del export (sin huérfanos); el guard del
+            #    indice.json evita arrasar el remoto con un origen vacío (ADR-0007).
             - name: publicar
               image: rclone/rclone:1.68
               command: ["/bin/sh", "-c"]
               args:
                 - |
                   set -e
+                  [ -f /data/publicacion/indice.json ] || {
+                    echo "publicacion/ ausente o sin indice: no se publica" >&2
+                    exit 1
+                  }
                   for remote in s3 gcs r2; do
                     rclone copyto /data/bcv_fx.db "$remote:bcv-fx-artefactos/bcv_fx.db" \
+                      --s3-no-check-bucket || exit 1
+                    rclone sync /data/publicacion "$remote:bcv-fx-artefactos/publicacion" \
                       --s3-no-check-bucket || exit 1
                     echo "publicado en $remote"
                   done

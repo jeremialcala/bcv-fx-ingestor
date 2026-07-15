@@ -22,9 +22,14 @@ spec:
               args:
                 - |
                   set -e
+                  [ -f /data/publicacion/indice.json ] || {
+                    echo "publicacion/ ausente o sin indice: no se publica" >&2
+                    exit 1
+                  }
                   mkdir -p /data/publicado
                   rclone copyto /data/bcv_fx.db /data/publicado/bcv_fx.db
-                  echo "publicado localmente en /data/publicado/bcv_fx.db"
+                  rclone sync /data/publicacion /data/publicado/publicacion
+                  echo "publicado localmente en /data/publicado (bcv_fx.db + publicacion/)"
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true

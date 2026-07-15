@@ -14,10 +14,13 @@ from pathlib import Path
 
 from .adaptadores.carpeta_local import CarpetaLocalAdapter
 from .adaptadores.descargador_http import DescargadorHttpBcv
+from .adaptadores.exportador_json import ExportadorJsonLocal
+from .adaptadores.integridad import sha256_de
 from .adaptadores.lector_xls import LectorXlsXlrd
 from .adaptadores.repositorio_sqlite import RepositorioSqlite
 from .aplicacion.consultar_estado import ConsultarEstadoUseCase
 from .aplicacion.descargar_periodo import DescargarPeriodoUseCase
+from .aplicacion.exportar_publicacion import ExportarPublicacionUseCase
 from .aplicacion.ingestar_archivo import IngestarArchivoUseCase
 from .dominio.modelos import ErrorDescarga, Periodo
 from .dominio.validador import ValidadorDominio
@@ -53,6 +56,12 @@ def construir_parser() -> argparse.ArgumentParser:
     estado = subparsers.add_parser("estado", help="estado de ingestas y cuarentenas pendientes")
     estado.add_argument("--jornada", metavar="AAAA-MM-DD")
 
+    exportar = subparsers.add_parser(
+        "exportar", help="exporta la publicación JSON derivada de la base (publicacion/)"
+    )
+    exportar.add_argument("--destino", required=True, metavar="DIR",
+                          help="carpeta existente donde escribir publicacion/")
+
     return parser
 
 
@@ -75,6 +84,8 @@ def main(argv: list[str] | None = None) -> int:
             return _cargar(args, repositorio, parser)
         if args.comando == "descargar":
             return _descargar(args, repositorio, parser)
+        if args.comando == "exportar":
+            return _exportar(args, repositorio, parser)
         return _estado(args, repositorio, parser)
     finally:
         repositorio.cerrar()
@@ -113,6 +124,16 @@ def _descargar(args, repositorio, parser) -> int:
     _imprimir(resultados)
     hubo_cuarentenas = any(r.get("cuarentenas") for r in resultados)
     return EXIT_CUARENTENAS if hubo_cuarentenas else EXIT_OK
+
+
+def _exportar(args, repositorio, parser) -> int:
+    destino = Path(args.destino)
+    if not destino.is_dir():
+        parser.error(f"el destino no existe: {destino}")
+    # el sha256 del .db lo calcula la capa de composición (RF17: procedencia en indice.json)
+    caso = ExportarPublicacionUseCase(repositorio, ExportadorJsonLocal(destino))
+    _imprimir(caso.ejecutar(sha256_de(Path(args.db))))
+    return EXIT_OK
 
 
 def _estado(args, repositorio, parser) -> int:

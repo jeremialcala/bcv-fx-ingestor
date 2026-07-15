@@ -78,6 +78,27 @@ _CONSULTAS_CONTEO = {
     "moneda": "SELECT COUNT(*) AS n FROM moneda",
 }
 
+# lectura para la publicación (ADR-0007): solo jornada/tasa/moneda — la cuarentena
+# queda fuera por construcción (paridad con el .db: lo no cargado no se publica)
+_CONSULTA_PUBLICACION = """
+SELECT j.fecha_operacion, j.fecha_valor, j.publicado_en, j.escala_monetaria,
+       m.codigo AS moneda, t.usd_bid, t.usd_ask, t.bs_bid, t.bs_ask,
+       t.cotizacion_invertida
+FROM jornada j
+JOIN tasa t ON t.jornada_id = j.id
+JOIN moneda m ON m.id = t.moneda_id
+ORDER BY j.fecha_operacion, m.codigo
+"""
+
+_CONSULTA_MONEDAS_PUBLICABLES = """
+SELECT m.codigo, m.pais, m.es_iso4217,
+       MAX(t.cotizacion_invertida) AS cotizacion_invertida
+FROM moneda m
+JOIN tasa t ON t.moneda_id = m.id
+GROUP BY m.id
+ORDER BY m.codigo
+"""
+
 
 class RepositorioSqlite(RepositorioTasasPort):
     def __init__(self, ruta_db: str | Path) -> None:
@@ -261,6 +282,43 @@ class RepositorioSqlite(RepositorioTasasPort):
                 c for c in estado["cuarentenas"] if c["hoja"] == hoja
             ]
         return estado
+
+    def jornadas_publicables(self):
+        jornada_actual: dict | None = None
+        for fila in self._conn.execute(_CONSULTA_PUBLICACION):
+            if jornada_actual is None or jornada_actual["fecha_operacion"] != fila["fecha_operacion"]:
+                if jornada_actual is not None:
+                    yield jornada_actual
+                jornada_actual = {
+                    "fecha_operacion": fila["fecha_operacion"],
+                    "fecha_valor": fila["fecha_valor"],
+                    "publicado_en": fila["publicado_en"],
+                    "escala_monetaria": fila["escala_monetaria"],
+                    "tasas": [],
+                }
+            jornada_actual["tasas"].append(
+                {
+                    "moneda": fila["moneda"],
+                    "usd_bid": fila["usd_bid"],
+                    "usd_ask": fila["usd_ask"],
+                    "bs_bid": fila["bs_bid"],
+                    "bs_ask": fila["bs_ask"],
+                    "cotizacion_invertida": bool(fila["cotizacion_invertida"]),
+                }
+            )
+        if jornada_actual is not None:
+            yield jornada_actual
+
+    def monedas_publicables(self) -> list[dict]:
+        return [
+            {
+                "codigo": fila["codigo"],
+                "pais": fila["pais"],
+                "es_iso4217": bool(fila["es_iso4217"]),
+                "cotizacion_invertida": bool(fila["cotizacion_invertida"]),
+            }
+            for fila in self._conn.execute(_CONSULTA_MONEDAS_PUBLICABLES)
+        ]
 
     def _contar(self, tabla: str) -> int:
         return self._conn.execute(_CONSULTAS_CONTEO[tabla]).fetchone()["n"]

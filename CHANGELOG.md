@@ -7,6 +7,18 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+### Añadido
+
+- Fase 03-implementation del feature FX-ING-002 (rumbo al Gate 2). Exportador de publicación (ADR-0007): caso de uso `ExportarPublicacion` + puerto `ExportadorPublicacionPort` + adaptador JSON local y comando `bcv-ingest exportar --destino DIR`; el repositorio gana las lecturas `jornadas_publicables`/`monedas_publicables` (SQL literal; la cuarentena queda fuera por construcción). Paridad verificada con el corpus real: 1.393 jornadas / 30.784 tasas idénticas a `bcv-ingest estado`, sha256 coincidente.
+- Worker de Cloudflare con la superficie de consulta (FX-ING-002): API `/api/tasas` (puntual y serie paginada con tope de 1.000 filas), `/api/jornadas/ultima` y `/api/monedas` según `openapi-consulta.yaml`, todas con metadatos de frescura (RF17); Web UI self-contained en `/`; `/estado` y `/bcv_fx.db` intactos (RF16, con tests de regresión). Harness de tests con `@cloudflare/vitest-pool-workers`: 43 tests de contrato en workerd real, nuevo job `worker` en el CI.
+- CronJob (base y overlay local): exportación de `publicacion/` tras la ingesta (fail-closed) y `rclone sync` del prefijo junto al `.db`, con guard del `indice.json` para no arrasar el remoto con un origen vacío. CI ahora corre también en `develop` (gitflow).
+- Runbook de despliegue ampliado: secret `API_KEYS` (`wrangler secret put`, rotación/revocación), regla de rate limiting de Cloudflare sobre `/api/*` (60 req/min por IP sugerido) y verificación post-deploy de la API (200 con clave / 401 sin clave / 429 sobre el umbral).
+
+### Seguridad
+
+- RS06–RS11 implementados en el Worker: default-deny sobre todo `/api/*` con comparación en tiempo constante (SHA-256 + `timingSafeEqual`); clave solo en header y solo en memoria en la UI; validación allowlist de parámetros con mapeo cerrado a objetos R2 (sin motor SQL en el edge); topes de página; `cache-control: no-store`, CSP `default-src 'none'` y nosniff; auditoría de acceso/rechazo por identificador de clave, jamás la clave.
+- Justificación DAST del mapa de gates actualizada: la API nueva se cubre con la suite vitest hostil del job `worker` y los curls post-deploy (decisión revisable).
+
 ## [1.2.0] - 2026-07-14
 
 ### Añadido
