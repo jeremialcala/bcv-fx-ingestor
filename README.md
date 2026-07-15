@@ -21,6 +21,7 @@ Proyecto estructurado con la metodología **AI-DLC** (seguridad por diseño, gat
 | 05-deployment | Gate 4 | ✅ aprobado 2026-07-12 |
 | 06-monitoring | Gate 5 | ✅ aprobado 2026-07-12 — ciclo AI-DLC completo (v1.0.0) |
 | 01-requirements (FX-ING-002) | Gate 0 | ✅ aprobado 2026-07-14 — consulta y descarga vía Web UI y API (v1.1.0) |
+| 02-design (FX-ING-002) | Gate 1 | ✅ aprobado 2026-07-14 — JSON precalculado en el edge, ADR-0007/0008 (v1.2.0) |
 
 ## Uso
 
@@ -70,13 +71,18 @@ bcv-fx-ingestor/
 │   │       ├── 0001-sqlite-como-almacen.md
 │   │       ├── 0002-ingesta-dual-descarga-y-local.md
 │   │       ├── 0003-parser-xlrd-con-validacion-de-dominio.md
-│   │       └── 0004-tls-estricto-sin-excepciones.md
+│   │       ├── 0004-tls-estricto-sin-excepciones.md
+│   │       ├── 0005-ci-github-actions-con-gates-de-seguridad.md
+│   │       ├── 0006-despliegue-multinube-edge-first.md
+│   │       ├── 0007-consulta-edge-json-precalculado.md
+│   │       └── 0008-rate-limiting-en-plataforma.md
 │   ├── 01-requirements/
 │   │   ├── ingesta-historicos-fx.md        # PRD FX-ING-001 (Gate 0)
 │   │   └── consulta-descarga-fx.md         # PRD FX-ING-002 (Gate 0)
 │   ├── 02-design/
-│   │   ├── architecture.md                 # Gate 1
-│   │   └── threat-model.md                 # Gate 1
+│   │   ├── architecture.md                 # Gate 1 (+ §Distribución y consulta, FX-ING-002)
+│   │   ├── threat-model.md                 # Gate 1 (+ T9–T15 del edge, FX-ING-002)
+│   │   └── contracts/openapi-consulta.yaml # API de consulta (FX-ING-002)
 │   ├── 03-implementation/
 │   │   └── repo-history.md                 # Gate 2 (documentación viva: gitGraph + bitácora)
 │   ├── 04-testing/
@@ -104,6 +110,7 @@ bcv-fx-ingestor/
     ├── gate-0-requirements.md
     ├── gate-0-requirements-fx-ing-002.md
     ├── gate-1-design.md
+    ├── gate-1-design-fx-ing-002.md
     ├── gate-2-implementation.md
     ├── gate-3-testing.md
     ├── gate-4-deployment.md

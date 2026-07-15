@@ -1,19 +1,22 @@
 # Diseño del Sistema — BCV FX Ingestor
 
 * **Estado:** approved
-* **Fecha:** 2026-07-11
+* **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
-* **Versión:** 0.2.0
+* **Versión:** 0.4.0
 * **Gate:** 1
 * **Estilo arquitectónico:** Clean / hexagonal (puertos y adaptadores)
-* **ADRs relacionadas:** ADR-0001, ADR-0002, ADR-0003
+* **ADRs relacionadas:** ADR-0001, ADR-0002, ADR-0003, ADR-0007, ADR-0008
+
+> *(Actualización 2026-07-14, FX-ING-002: se añade la vista de distribución y consulta en el edge — §Distribución y consulta. Las secciones de la ingesta permanecen como fueron aprobadas en el Gate 1 original. Gate 1 del feature aprobado el 2026-07-14; el doc vuelve a `approved`.)*
 
 ## Contextos acotados (DDD)
 
 | Bounded Context | Responsabilidad | Entidades núcleo |
 |---|---|---|
 | Ingesta Cambiaria | Obtener, validar y cargar jornadas de tasas de referencia | Ingesta, Jornada, Tasa, Moneda |
+| Consulta Cambiaria | Publicar y servir consultas de solo lectura sobre la serie ya cargada (FX-ING-002) | Publicación (JSON derivado), Consulta puntual, Serie, Clave API |
 
 ## Vista C4 — Container
 
@@ -219,15 +222,88 @@ classDiagram
     RepositorioSqlite ..|> RepositorioTasasPort
 ```
 
+## Distribución y consulta en el edge (FX-ING-002)
+
+Vista del bounded context Consulta Cambiaria: el pipeline precalcula la publicación como JSON derivado de SQLite (ADR-0007) y el Worker la sirve autenticada por clave API, con rate limiting en la plataforma (ADR-0008). El Worker no ejecuta ningún motor de consulta.
+
+```mermaid
+C4Container
+    title Diagrama de contenedores — Distribucion y consulta (FX-ING-002)
+
+    Person(analista, "Analista consumidor", "Consulta y descarga con su clave API")
+    System_Ext(pipeline, "Pipeline de ingesta", "CronJob K8s: bcv-ingest (descargar + exportar) y rclone publica a R2", $tags="external")
+
+    System_Boundary(edge, "Cloudflare edge") {
+        Container(ui, "Web UI", "HTML/JS estatico en el Worker", "Formulario, tabla y descarga JSON; pide la clave al usuario, nunca la incrusta")
+        Container(guard, "Guard de autenticacion", "Worker JS", "Default-deny sobre /api/*; clave en header X-Api-Key, comparacion en tiempo constante", $tags="owasp-a01")
+        Container(api, "API de consulta", "Worker JS", "Valida parametros (allowlist), mapea a objetos de publicacion, filtra y pagina con topes", $tags="owasp-a03")
+        ContainerDb(r2, "R2 bcv-fx-artefactos", "Objetos", "bcv_fx.db + publicacion/ (ultima, jornadas, series, monedas, indice)")
+    }
+
+    Rel(analista, ui, "Abre el formulario", "HTTPS")
+    Rel(ui, api, "fetch de consultas", "HTTPS + X-Api-Key")
+    Rel(guard, api, "Delega tras autenticar", "en proceso")
+    Rel(api, r2, "Lee publicacion/", "binding R2")
+    Rel(pipeline, r2, "Publica .db + publicacion/ en la misma corrida", "rclone")
+
+    UpdateElementStyle(api, $bgColor="#1168bd", $fontColor="#ffffff")
+    UpdateElementStyle(pipeline, $bgColor="#999999", $fontColor="#ffffff")
+    UpdateElementStyle(guard, $borderColor="#b30000")
+    UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
+```
+
+### Flujo crítico de consulta
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor A as Analista
+    participant UI as Web UI
+    participant G as Guard de autenticacion
+    participant API as API de consulta
+    participant R2 as R2 publicacion/
+    A->>UI: abre el formulario y aporta su clave API
+    UI->>G: GET /api/tasas?fecha=2024-05-15&moneda=EUR (X-Api-Key)
+    G->>G: validar clave (tiempo constante, default-deny)
+    alt clave ausente o invalida
+        G-->>UI: 401/403 (rechazo auditado con id de clave)
+    else clave valida
+        G->>API: request autenticado (id de clave para auditoria)
+        API->>API: validar parametros (fecha ISO-8601, moneda en allowlist, topes)
+        alt parametros invalidos
+            API-->>UI: 400 controlado (sin detalles internos)
+        else
+            API->>R2: GET publicacion/jornadas/2024-05-15.json
+            alt objeto inexistente (sin jornada)
+                R2-->>API: null
+                API-->>UI: 404 controlado (fecha sin jornada)
+            else
+                R2-->>API: JSON de la jornada
+                API-->>UI: 200 + metadatos de frescura (sha256, generado_en)
+            end
+        end
+    end
+    UI-->>A: tabla de resultados y boton de descarga JSON
+```
+
+### Contrato de publicación (R2, prefijo `publicacion/`)
+
+Derivado íntegramente de SQLite por `bcv-ingest exportar` (nuevo caso de uso `ExportarPublicacion` + puerto `ExportadorPublicacionPort`, mismo patrón hexagonal): `ultima.json`, `jornadas/AAAA-MM-DD.json`, `series/{MONEDA}.json`, `monedas.json` e `indice.json` (fechas disponibles, `sha256` del `.db`, `generado_en`). La cuarentena nunca se exporta. Detalle y alternativas en ADR-0007.
+
+### Contrato de la API de consulta
+
+El contrato de red del feature es el esqueleto OpenAPI en `docs/02-design/contracts/openapi-consulta.yaml` (endpoints `/api/tasas`, `/api/jornadas/ultima`, `/api/monedas`; seguridad `X-Api-Key`; errores 400/401/404/429 con shape uniforme). `/estado` y `/bcv_fx.db` conservan su contrato actual (RF16) y quedan fuera del OpenAPI.
+
 ## Contratos (CLI + schema SQLite)
 
-No hay API de red: el contrato público es la CLI y el schema de la base.
+No hay API de red en el bounded context de la ingesta: su contrato público es la CLI y el schema de la base. *(Actualización 2026-07-14: la API de red del bounded context Consulta Cambiaria se especifica en §Distribución y consulta y en `contracts/openapi-consulta.yaml` — FX-ING-002.)*
 
 | Comando | Argumentos | Salida / exit code |
 |---|---|---|
 | `bcv-ingest descargar` | `--desde AAAA-MM --hasta AAAA-MM [--destino DIR]` | Resumen JSON por archivo; 0 OK, 2 cuarentenas, 3 error de red |
 | `bcv-ingest cargar` | `RUTA` (archivo `.xls` o carpeta) | Resumen JSON: cargadas/duplicadas/cuarentena; 0 OK, 2 cuarentenas |
 | `bcv-ingest estado` | `[--jornada AAAA-MM-DD]` | Estado de ingestas y cuarentenas pendientes; 0 siempre |
+| `bcv-ingest exportar` | `--destino DIR` (propuesto, FX-ING-002) | Publicación JSON derivada de la base (`publicacion/`); 0 OK |
 
 ```sql
 CREATE TABLE ingesta (
@@ -287,3 +363,10 @@ Nota: `BID <= ASK` se valida en el Validador (no como CHECK) porque la fuente co
 | T5 XLS malicioso | xlrd sin macros; límites de tamaño/filas; ingesta en proceso sin privilegios | A03/A08 |
 | T6 Inyección SQL | Solo queries parametrizadas (sqlite3 placeholders) | A03 |
 | T7 Mezcla de escalas | Campo `escala_monetaria` por jornada + tabla de vigencia de redenominaciones | A08 |
+| T9 Clave API robada/filtrada | Secret en Wrangler, clave solo en header, rotación/revocación documentada (RS07) + auditoría por id de clave (RS11) | A01/A02 |
+| T10 Inyección por parámetros de consulta | Validación allowlist (fecha ISO, moneda del catálogo) y mapeo cerrado parámetro→clave de objeto R2 — sin motor SQL en el edge (ADR-0007) | A03 |
+| T11 Scraping masivo / DoS del servicio de consulta | Rate limiting de plataforma sobre `/api/*` + topes de página/respuesta en el Worker (ADR-0008) | A04 |
+| T12 Bypass de autenticación (default-allow) | Guard default-deny: toda ruta `/api/*` nace protegida; comparación en tiempo constante (RS06) | A01 |
+| T13 Enumeración de rutas / errores verbosos | Errores uniformes 400/404 sin detalles internos; 404 genérico fuera del contrato | A05 |
+| T14 Caché compartida con respuestas autenticadas o publicación inconsistente | `cache-control` explícito por endpoint, cache key sin credenciales (RS10); publicación conjunta `.db` + `publicacion/` con `sha256` común en `indice.json` (ADR-0007) | A05/A08 |
+| T15 Uso sin trazabilidad por clave | Log de acceso y de rechazo con identificador de clave, nunca la clave (RS11) | A09 |
