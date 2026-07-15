@@ -4,7 +4,7 @@
 * **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 03-implementation
-* **Versión:** 1.1.0
+* **Versión:** 1.2.0
 * **Gate:** 2
 * **Rama principal:** main
 * **Estrategia de branching:** gitflow (develop/feature/release; trunk-based hasta v1.0.0)
@@ -55,14 +55,29 @@ gitGraph
     commit id: "2fde888"
     checkout main
     merge feature-0 tag: "v1.1.0"
+    branch feature-1
+    checkout feature-1
+    commit id: "b7497c0"
+    commit id: "66c2183"
+    commit id: "01f34f3"
+    commit id: "37f4f54"
+    commit id: "0ea51a9"
+    checkout main
+    merge feature-1 tag: "v1.2.0"
 ```
 
 ### Bitácora de cambios (fiel al repo)
 
 | Commit | Tipo | Tags | Autor | Fecha | Mensaje |
 |---|---|---|---|---|---|
-| `b7497c0` | merge | — | Jeremi Alcala | 2026-07-14 | Merge release/1.1.0 en develop — cierre de la release 1.1.0 |
+| `1d10141` | merge | — | Jeremi Alcala | 2026-07-14 | Merge release/1.2.0 en develop — cierre de la release 1.2.0 |
+| `dbd53e5` | merge | v1.2.0 | Jeremi Alcala | 2026-07-14 | Merge release/1.2.0 en main — versión 1.2.0 (Gate 1 de FX-ING-002) |
+| `0ea51a9` | commit | — | Jeremi Alcala | 2026-07-14 | chore(release): cortar versión 1.2.0 — Gate 1 de FX-ING-002 |
+| `37f4f54` | merge | — | Jeremi Alcala | 2026-07-14 | Merge feature/fx-ing-002-diseno en develop — fase 02-design del feature FX-ING-002 |
+| `01f34f3` | commit | — | Jeremi Alcala | 2026-07-14 | feat(fx-ing-002): fase 02-design — consulta en el edge con JSON precalculado |
+| `66c2183` | commit | — | Jeremi Alcala | 2026-07-14 | docs: regenerar historial vivo tras el tag v1.1.0 — gitflow adoptado |
 | `d75331c` | merge | v1.1.0 | Jeremi Alcala | 2026-07-14 | Merge release/1.1.0 en main — versión 1.1.0 (Gate 0 de FX-ING-002) |
+| `b7497c0` | merge | — | Jeremi Alcala | 2026-07-14 | Merge release/1.1.0 en develop — cierre de la release 1.1.0 |
 | `2fde888` | commit | — | Jeremi Alcala | 2026-07-14 | chore(release): cortar versión 1.1.0 — Gate 0 de FX-ING-002 |
 | `2c954ca` | merge | — | Jeremi Alcala | 2026-07-14 | Merge feature/fx-ing-002-requisitos en develop — Gate 0 del feature FX-ING-002 |
 | `1482c54` | commit | — | Jeremi Alcala | 2026-07-14 | feat(fx-ing-002): requisitos de consulta y descarga vía Web UI y API — Gate 0 aprobado |
@@ -108,3 +123,4 @@ gitGraph
 | v0.5.0 | 0.5.0 (Gate 4) | ADR-0005 · ADR-0006 | CI con gates de seguridad, imagen GHCR, K8s EKS/GKE, Worker R2; intermedio Sectigo vendorizado |
 | v1.0.0 | 1.0.0 (Gate 5) | observability.md (SLOs + incidentes) | primer release productivo: frescura instrumentada, health/smoke/re-scan como alertas — ciclo AI-DLC completo |
 | v1.1.0 | 1.1.0 (Gate 0 de FX-ING-002) | FX-ING-002 (PRD consulta-descarga) · ADR-0007 pendiente | requisitos de consulta y descarga vía Web UI y API con clave API; no-scope levantado; overlay k8s local; adopción de gitflow |
+| v1.2.0 | 1.2.0 (Gate 1 de FX-ING-002) | ADR-0007 · ADR-0008 · openapi-consulta.yaml | diseño del edge: JSON precalculado junto al artefacto, rate limiting en plataforma, STRIDE/DREAD T9–T15 |
