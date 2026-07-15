@@ -66,3 +66,23 @@ class RepositorioTasasPort(ABC):
 
     @abstractmethod
     def estado_general(self, fecha_operacion=None) -> dict: ...
+
+    @abstractmethod
+    def jornadas_publicables(self) -> Iterator[dict]:
+        """Jornadas cargadas con sus tasas, en orden cronológico, con el shape
+        Jornada de la publicación (ADR-0007). La cuarentena queda fuera por
+        construcción: solo lee jornada/tasa/moneda."""
+
+    @abstractmethod
+    def monedas_publicables(self) -> list[dict]:
+        """Catálogo de la publicación: solo monedas con al menos una tasa,
+        con `cotizacion_invertida` tomada de la tabla tasa."""
+
+
+class ExportadorPublicacionPort(ABC):
+    """Destino de la publicación derivada (ADR-0007). El caso de uso arma los
+    documentos; el adaptador solo los materializa bajo el prefijo publicacion/."""
+
+    @abstractmethod
+    def escribir(self, ruta_relativa: str, datos: dict) -> None:
+        """Escribe un documento JSON en publicacion/<ruta_relativa> (UTF-8)."""

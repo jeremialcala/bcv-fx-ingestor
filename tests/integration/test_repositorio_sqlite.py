@@ -127,6 +127,49 @@ def test_frescura_para_monitoreo(repo):
     assert frescura["ultima_ingesta_en"] is not None
 
 
+def test_jornadas_publicables_excluye_cuarentena_y_ordena(repo):
+    # ADR-0007: la publicación solo lee jornada/tasa/moneda — la cuarentena queda fuera
+    ingesta_id = repo.registrar_ingesta(archivo(), EstadoIngesta.VALIDANDO)
+    repo.guardar_jornada(jornada(), ingesta_id)
+    temprana = JornadaValidada(
+        fecha_operacion=date(2020, 3, 30),
+        fecha_valor=date(2020, 3, 31),
+        publicado_en=None,
+        escala_monetaria=10**6,
+        tasas=(TasaValidada("USD", 1.0, 1.0, 80000.0, 80100.0, False),),
+    )
+    repo.guardar_jornada(temprana, ingesta_id)
+    repo.enviar_a_cuarentena(
+        ingesta_id, ItemCuarentena(hoja="31032020", motivo="CHF: spread incoherente")
+    )
+    repo.confirmar()
+
+    publicables = list(repo.jornadas_publicables())
+    assert [j["fecha_operacion"] for j in publicables] == ["2020-03-30", "2020-03-31"]
+    assert publicables[0]["publicado_en"] is None
+    ultima = publicables[1]
+    assert ultima["fecha_valor"] == "2020-04-01"
+    assert ultima["escala_monetaria"] == 10**6
+    assert [t["moneda"] for t in ultima["tasas"]] == ["EUR", "USD"]  # ORDER BY codigo
+    eur = ultima["tasas"][0]
+    assert eur["cotizacion_invertida"] is True  # bool, no 0/1
+    assert eur["usd_bid"] == 1.10127 and eur["bs_ask"] == 89146.33
+    assert not any("CHF" in str(j) for j in publicables)  # la cuarentena no se publica
+
+
+def test_monedas_publicables_solo_con_tasas(repo):
+    ingesta_id = repo.registrar_ingesta(archivo(), EstadoIngesta.VALIDANDO)
+    repo.guardar_jornada(jornada(), ingesta_id)
+    repo.confirmar()
+
+    monedas = repo.monedas_publicables()
+    assert [m["codigo"] for m in monedas] == ["EUR", "USD"]  # el resto del catálogo, sin tasas, no sale
+    eur, usd = monedas
+    assert eur["cotizacion_invertida"] is True and eur["es_iso4217"] is True
+    assert usd["cotizacion_invertida"] is False
+    assert usd["pais"]  # el país viene del catálogo sembrado
+
+
 def test_revertir_descarta_la_transaccion_completa(repo):
     # A1: nunca cargas parciales
     ingesta_id = repo.registrar_ingesta(archivo(), EstadoIngesta.VALIDANDO)
