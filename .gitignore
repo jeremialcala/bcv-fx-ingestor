@@ -9,3 +9,5 @@ dist/
 build/
 *.db
 entrada/
+node_modules/
+.dev.vars

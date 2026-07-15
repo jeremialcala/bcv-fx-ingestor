@@ -1,0 +1,21 @@
+{
+  "name": "bcv-fx-worker",
+  "private": true,
+  "description": "Worker de distribución y consulta del artefacto bcv_fx.db (FX-ING-002)",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.18.4",
+    "vitest": "^4.1.0",
+    "wrangler": "^4"
+  },
+  "allowScripts": {
+    "workerd@1.20260708.1": true,
+    "esbuild@0.28.1": true,
+    "sharp@0.34.5": true
+  }
+}
