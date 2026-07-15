@@ -1,15 +1,15 @@
 # Diseño del Sistema — BCV FX Ingestor
 
-* **Estado:** review
+* **Estado:** approved
 * **Fecha:** 2026-07-14
 * **Decisores:** Jeremi Alcalá
 * **Fase AI-DLC:** 02-design
-* **Versión:** 0.3.0
+* **Versión:** 0.4.0
 * **Gate:** 1
 * **Estilo arquitectónico:** Clean / hexagonal (puertos y adaptadores)
 * **ADRs relacionadas:** ADR-0001, ADR-0002, ADR-0003, ADR-0007, ADR-0008
 
-> *(Actualización 2026-07-14, FX-ING-002: se añade la vista de distribución y consulta en el edge — §Distribución y consulta. Las secciones de la ingesta permanecen como fueron aprobadas en el Gate 1 original; el doc vuelve a `review` hasta el Gate 1 del feature.)*
+> *(Actualización 2026-07-14, FX-ING-002: se añade la vista de distribución y consulta en el edge — §Distribución y consulta. Las secciones de la ingesta permanecen como fueron aprobadas en el Gate 1 original. Gate 1 del feature aprobado el 2026-07-14; el doc vuelve a `approved`.)*
 
 ## Contextos acotados (DDD)
 

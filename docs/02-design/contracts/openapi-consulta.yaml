@@ -1,5 +1,5 @@
 # Esqueleto de contrato — API de consulta FX (FX-ING-002, Gate 1)
-# Estado: review · Fecha: 2026-07-14 · Decisores: Jeremi Alcalá · Fase: 02-design · Versión: 0.1.0
+# Estado: approved · Fecha: 2026-07-14 · Decisores: Jeremi Alcalá · Fase: 02-design · Versión: 0.2.0
 # /estado y /bcv_fx.db conservan su contrato actual (RF16) y quedan fuera de este documento.
 openapi: 3.1.0
 info:
