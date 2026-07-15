@@ -7,6 +7,14 @@ y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/
 
 ## [Unreleased]
 
+### Añadido
+
+- Fase 02-design del feature FX-ING-002 (rumbo al Gate 1): ADR-0007 (consulta en el edge vía JSON precalculado publicado junto al artefacto — supersede parcialmente ADR-0006) y ADR-0008 (rate limiting en la plataforma Cloudflare con topes de respuesta en el Worker); `architecture.md` §Distribución y consulta (bounded context Consulta Cambiaria, C4Container del edge, sequence del flujo de consulta, contrato de publicación `publicacion/` y comando propuesto `bcv-ingest exportar`); esqueleto de contrato `docs/02-design/contracts/openapi-consulta.yaml`; checklist `gates/gate-1-design-fx-ing-002.md` (draft, aprobación humana pendiente).
+
+### Seguridad
+
+- Threat model extendido a la superficie de consulta del edge: DFD con el trust boundary de Cloudflare, STRIDE de los componentes nuevos (Guard, API, Cache, Publicación R2, Web UI) y amenazas T9–T15 priorizadas con DREAD — todas las ≥ 6.0 con control trazable a RS06–RS11 y ADR-0007/0008. `architecture.md` y `threat-model.md` pasan a `review` hasta el Gate 1 del feature.
+
 ## [1.1.0] - 2026-07-14
 
 ### Añadido
